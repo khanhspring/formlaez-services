@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/formlaez
+    username: postgres
+    password: postgres
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:9000
+  jpa:
+    show-sql: false
+
+formlaez:
+  client:
+    auth:
+      baseUrl: http://localhost:9000
+      authorization: Basic Zm9ybWxhZXotd2ViOjEyMzQ1NjdhQCM=
+      redirectUri: http://127.0.0.1:3000/login/code
+
+  basic-auth:
+    users:
+      - username: formlaez-auth
+        password: "{bcrypt}$2a$10$ZkVufhbhMwdbAg74OIB0FuhjDUMsZWB3ses4NydeqBh8KYdLluVMa"
+        roles: "Admin"

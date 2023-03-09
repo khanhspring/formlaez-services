@@ -1,0 +1,15 @@
+version: '3.5'
+
+services:
+  formlaez-nginx:
+    image: formlaez-nginx
+    build:
+      context: nginx
+    ports:
+      - 80:80
+    networks:
+      - formlaez-net
+
+networks:
+  formlaez-net:
+    external: true

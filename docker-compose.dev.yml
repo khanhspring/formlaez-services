@@ -1,0 +1,18 @@
+version: "3.3"
+
+services:
+
+  formlaez-services:
+    image: formlaez-services
+    build:
+      context: .
+    environment:
+      ACTIVE_PROFILE: dev
+    ports:
+      - "8080:8080"
+    networks:
+      - formlaez-net
+
+networks:
+  formlaez-net:
+    external: true

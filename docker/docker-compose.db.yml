@@ -1,0 +1,21 @@
+version: "3.3"
+
+services:
+  postgresql:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: 6*[)s8G'Vs#rQUsm
+    volumes:
+      - formlaez_services_postgresql_volume:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - formlaez-net
+
+volumes:
+  formlaez_services_postgresql_volume:
+
+networks:
+  formlaez-net:
+    external: true
