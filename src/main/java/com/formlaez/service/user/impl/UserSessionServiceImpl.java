@@ -2,7 +2,7 @@ package com.formlaez.service.user.impl;
 
 import com.formlaez.application.model.response.MemberWorkspaceResponse;
 import com.formlaez.application.model.response.UserSessionResponse;
-import com.formlaez.infrastructure.converter.WorkspaceResponseConvertor;
+import com.formlaez.infrastructure.converter.WorkspaceResponseConverter;
 import com.formlaez.infrastructure.model.entity.JpaWorkspaceMember;
 import com.formlaez.infrastructure.repository.JpaWorkspaceMemberRepository;
 import com.formlaez.infrastructure.util.AuthUtils;
@@ -22,7 +22,7 @@ import static com.formlaez.infrastructure.enumeration.WorkspaceMemberRole.Owner;
 public class UserSessionServiceImpl implements UserSessionService {
 
     private final JpaWorkspaceMemberRepository jpaWorkspaceMemberRepository;
-    private final WorkspaceResponseConvertor workspaceResponseConvertor;
+    private final WorkspaceResponseConverter workspaceResponseConverter;
 
     @Override
     public UserSessionResponse getCurrentUserSession() {
@@ -46,7 +46,7 @@ public class UserSessionServiceImpl implements UserSessionService {
     }
 
     private MemberWorkspaceResponse toResponse(JpaWorkspaceMember workspaceMember) {
-        var workspace = workspaceResponseConvertor.convert(workspaceMember.getWorkspace());
+        var workspace = workspaceResponseConverter.convert(workspaceMember.getWorkspace());
         return MemberWorkspaceResponse.builder()
                 .workspace(workspace)
                 .role(workspaceMember.getRole())

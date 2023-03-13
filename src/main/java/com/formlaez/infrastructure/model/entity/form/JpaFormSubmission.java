@@ -1,6 +1,8 @@
 package com.formlaez.infrastructure.model.entity.form;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.formlaez.infrastructure.enumeration.FormScope;
+import com.formlaez.infrastructure.enumeration.FormSubmissionStatus;
 import com.formlaez.infrastructure.model.entity.JpaBaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,6 +27,9 @@ public class JpaFormSubmission extends JpaBaseEntity {
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
     private JsonNode data;
+
+    @Enumerated(EnumType.STRING)
+    private FormSubmissionStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "form_id")

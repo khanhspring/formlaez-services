@@ -2,6 +2,8 @@ package com.formlaez.application.model.response.form;
 
 import com.formlaez.infrastructure.enumeration.FormCoverType;
 import com.formlaez.infrastructure.enumeration.FormScope;
+import com.formlaez.infrastructure.enumeration.FormSharingScope;
+import com.formlaez.infrastructure.enumeration.FormStatus;
 import lombok.*;
 
 import java.time.Instant;
@@ -21,7 +23,11 @@ public class FormResponse {
     private FormCoverType coverType;
     private String coverColor;
     private String coverImageUrl;
-
+    private FormStatus status;
+    private FormSharingScope sharingScope;
+    private boolean acceptResponses;
+    private boolean allowPrinting;
+    private boolean allowResponseEditing;
     private List<FormPageResponse> pages;
 
     private Instant createdDate;

@@ -15,6 +15,7 @@ public interface JpaWorkspaceMemberRepository extends JpaRepository<JpaWorkspace
     Page<JpaWorkspaceMember> findByWorkspaceId(Long workspaceId, Pageable pageable);
     List<JpaWorkspaceMember> findAllByUserId(UUID userId);
     Optional<JpaWorkspaceMember> findByUserIdAndWorkspaceId(UUID userId, Long workspaceId);
+    boolean existsByUserIdAndWorkspaceId(UUID userId, Long workspaceId);
     List<JpaWorkspaceMember> findAllByUserId(UUID userId, Sort sort);
 
     boolean existsByUserIdAndRole(UUID userId, WorkspaceMemberRole role);

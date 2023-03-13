@@ -15,4 +15,9 @@ public class CreateFormRequest {
 
     @NotNull
     private FormScope scope;
+
+    @NotNull
+    private Long workspaceId;
+
+    private Long teamId; // required when scope is Team
 }

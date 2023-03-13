@@ -3,6 +3,8 @@ spring:
     url: jdbc:postgresql://localhost:5432/formlaez
     username: postgres
     password: postgres
+    hikari:
+      connection-init-sql: SET TIME ZONE 'UTC'
 
   security:
     oauth2:
@@ -24,3 +26,14 @@ formlaez:
       - username: formlaez-auth
         password: "{bcrypt}$2a$10$ZkVufhbhMwdbAg74OIB0FuhjDUMsZWB3ses4NydeqBh8KYdLluVMa"
         roles: "Admin"
+
+  aws:
+    s3:
+      bucketName: formlaez-dev
+      credentials:
+        accessKey: AKIASWNAGJRE4MK63Q7B
+        secretKey: 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
+
+logging:
+  level:
+    root: info

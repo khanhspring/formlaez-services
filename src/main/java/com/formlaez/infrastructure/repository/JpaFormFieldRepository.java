@@ -22,4 +22,7 @@ public interface JpaFormFieldRepository extends JpaRepository<JpaFormField, Long
                                @Param("value") int value,
                                @Param("fromPosition") Integer fromPosition,
                                @Param("toPosition") Integer toPosition);
+
+    @Modifying
+    void deleteAllBySectionId(Long sectionId);
 }

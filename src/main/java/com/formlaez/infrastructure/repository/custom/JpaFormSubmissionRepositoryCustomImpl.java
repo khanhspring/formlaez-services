@@ -1,6 +1,7 @@
 package com.formlaez.infrastructure.repository.custom;
 
 import com.formlaez.application.model.request.AdvanceSearchFormSubmissionRequest;
+import com.formlaez.infrastructure.enumeration.FormSubmissionStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -31,6 +32,7 @@ public class JpaFormSubmissionRepositoryCustomImpl implements JpaFormSubmissionR
                 " left join \"user\" c on c.id = s.created_by" +
                 " left join \"user\" m on m.id = s.last_modified_by" +
                 " where 1=1" +
+                " and s.status = '" + FormSubmissionStatus.Active.name() + "'" +
                 " and f.code = :formCode");
         paramMap.put("formCode", request.getFormCode());
 

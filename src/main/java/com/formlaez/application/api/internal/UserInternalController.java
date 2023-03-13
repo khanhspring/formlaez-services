@@ -2,7 +2,7 @@ package com.formlaez.application.api.internal;
 
 import com.formlaez.application.model.request.CreateUserRequest;
 import com.formlaez.application.model.response.ResponseId;
-import com.formlaez.service.user.UserService;
+import com.formlaez.service.internal.user.UserInternalService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,10 +17,10 @@ import java.util.UUID;
 @RequestMapping(value = "/internal/users")
 public class UserInternalController {
 
-    private final UserService userService;
+    private final UserInternalService userInternalService;
 
     @PostMapping
     public ResponseId<UUID> create(@RequestBody @Valid CreateUserRequest request) {
-        return ResponseId.of(userService.create(request));
+        return ResponseId.of(userInternalService.create(request));
     }
 }

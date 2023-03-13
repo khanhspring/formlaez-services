@@ -8,5 +8,4 @@ import org.springframework.data.repository.query.Param;
 public interface JpaFormSubmissionRepositoryCustom {
 
     Page<JpaFormSubmissionSearchResult> searchAdvance(@Param("request") AdvanceSearchFormSubmissionRequest request, Pageable pageable);
-
 }
