@@ -113,6 +113,7 @@ public class FormSubmissionAdminServiceImpl implements FormSubmissionAdminServic
         var csvInfo = formSubmissionDataCsvConverter.convert(form, submissions);
         var headerNames = csvInfo.headerNames();
         if (headerNames.size() > 0) {
+            // using BOM to avoid utf8 encoding errors when open in Windows
             headerNames.set(0, CsvUtils.UTF8_BOM + headerNames.get(0));
         }
         var headerNameArr = headerNames.toArray(new String[]{});

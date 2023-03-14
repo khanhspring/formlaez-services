@@ -15,7 +15,7 @@ public class AttachmentAdminController {
 
     private final AttachmentAdminService attachmentAdminService;
 
-    @GetMapping("{code}")
+    @GetMapping("{code}/download-url")
     public PresignedUrlResponse getDownloadUrl(@PathVariable String code) {
         return attachmentAdminService.getDownloadUrl(code);
     }
