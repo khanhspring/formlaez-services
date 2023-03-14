@@ -14,6 +14,7 @@ import java.util.Objects;
 public class FormResponseConverter implements Converter<JpaForm, FormResponse> {
 
     private final FormPageResponseConverter formPageResponseConverter;
+    private final FormEndingResponseConverter formEndingResponseConverter;
 
     @Nullable
     @Override
@@ -37,6 +38,7 @@ public class FormResponseConverter implements Converter<JpaForm, FormResponse> {
                 .allowResponseEditing(source.isAllowResponseEditing())
                 .lastModifiedDate(source.getLastModifiedDate())
                 .pages(formPageResponseConverter.convert(source.getPages()))
+                .ending(formEndingResponseConverter.convert(source.getFormEnding()))
                 .build();
     }
 }

@@ -13,7 +13,7 @@ public interface FormAdminService {
     Page<BasicFormResponse> search(SearchFormRequest request, Pageable pageable);
     BasicFormResponse findByCode(String code);
     FormResponse getDetail(String code);
-    Long create(CreateFormRequest request);
+    String create(CreateFormRequest request);
     void update(UpdateFormRequest request);
     void updateSettings(UpdateFormSettingsRequest request);
     void publish(Long id);

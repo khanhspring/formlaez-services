@@ -1,6 +1,9 @@
 package com.formlaez.infrastructure.model.entity.form;
 
-import com.formlaez.infrastructure.enumeration.*;
+import com.formlaez.infrastructure.enumeration.FormCoverType;
+import com.formlaez.infrastructure.enumeration.FormScope;
+import com.formlaez.infrastructure.enumeration.FormSharingScope;
+import com.formlaez.infrastructure.enumeration.FormStatus;
 import com.formlaez.infrastructure.model.entity.JpaBaseEntity;
 import com.formlaez.infrastructure.model.entity.JpaWorkspace;
 import com.formlaez.infrastructure.model.entity.team.JpaTeam;
@@ -54,4 +57,7 @@ public class JpaForm extends JpaBaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id")
     private JpaTeam team;
+
+    @OneToOne(mappedBy = "form", fetch = FetchType.LAZY)
+    private JpaFormEnding formEnding;
 }

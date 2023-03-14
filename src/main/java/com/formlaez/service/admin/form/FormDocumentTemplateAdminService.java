@@ -7,7 +7,7 @@ import com.formlaez.application.model.response.FormDocumentTemplateResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface FormDocumentTemplateService {
+public interface FormDocumentTemplateAdminService {
 
     Page<FormDocumentTemplateResponse> search(SearchFormDocumentTemplateRequest request, Pageable pageable);
 

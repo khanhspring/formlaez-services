@@ -8,6 +8,7 @@ import com.formlaez.application.model.response.FormDocumentTemplateResponse;
 import com.formlaez.infrastructure.configuration.exception.ApplicationException;
 import com.formlaez.infrastructure.configuration.exception.InvalidParamsException;
 import com.formlaez.infrastructure.configuration.exception.ResourceNotFoundException;
+import com.formlaez.infrastructure.converter.FormDocumentTemplateResponseConverter;
 import com.formlaez.infrastructure.model.common.attachment.AttachmentMetadata;
 import com.formlaez.infrastructure.model.entity.JpaAttachment;
 import com.formlaez.infrastructure.model.entity.JpaFormDocumentTemplate;
@@ -15,7 +16,7 @@ import com.formlaez.infrastructure.repository.JpaAttachmentRepository;
 import com.formlaez.infrastructure.repository.JpaFormDocumentTemplateRepository;
 import com.formlaez.infrastructure.repository.JpaFormRepository;
 import com.formlaez.infrastructure.util.AttachmentUtils;
-import com.formlaez.service.admin.form.FormDocumentTemplateService;
+import com.formlaez.service.admin.form.FormDocumentTemplateAdminService;
 import com.formlaez.service.storage.CloudStorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +34,7 @@ import static com.formlaez.infrastructure.enumeration.AttachmentCategory.Documen
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class FormDocumentTemplateServiceImpl implements FormDocumentTemplateService {
+public class FormDocumentTemplateAdminServiceImpl implements FormDocumentTemplateAdminService {
 
     private static final String ACCEPTED_EXTENSIONS = "docx";
 
@@ -41,12 +42,13 @@ public class FormDocumentTemplateServiceImpl implements FormDocumentTemplateServ
     private final JpaAttachmentRepository jpaAttachmentRepository;
     private final JpaFormRepository jpaFormRepository;
     private final CloudStorageService cloudStorageService;
+    private final FormDocumentTemplateResponseConverter formDocumentTemplateResponseConverter;
 
     @Override
     @Transactional(readOnly = true)
     public Page<FormDocumentTemplateResponse> search(SearchFormDocumentTemplateRequest request, Pageable pageable) {
         return jpaFormDocumentTemplateRepository.search(request, pageable)
-                .map(this::toResponse);
+                .map(formDocumentTemplateResponseConverter::convert);
     }
 
     @Override
@@ -112,20 +114,5 @@ public class FormDocumentTemplateServiceImpl implements FormDocumentTemplateServ
         documentTemplate.setDescription(request.getDescription());
         documentTemplate.setTitle(request.getTitle());
         jpaFormDocumentTemplateRepository.save(documentTemplate);
-    }
-
-    private FormDocumentTemplateResponse toResponse(JpaFormDocumentTemplate source) {
-        return FormDocumentTemplateResponse.builder()
-                .id(source.getId())
-                .code(source.getCode())
-                .attachmentCode(source.getAttachment().getCode())
-                .title(source.getTitle())
-                .description(source.getDescription())
-                .extension(source.getAttachment().getExtension())
-                .size(source.getAttachment().getSize())
-                .originalName(source.getAttachment().getOriginalName())
-                .createdDate(source.getCreatedDate())
-                .lastModifiedDate(source.getLastModifiedDate())
-                .build();
     }
 }

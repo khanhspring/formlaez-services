@@ -70,3 +70,11 @@ databaseChangeLog:
         - sqlFile:
             splitStatements: true
             path: db/changelog/scripts/0.0.1__009__alter_table_form_document_template.sql
+
+  - changeSet:
+      id: 0.0.1__010__create_table_form_ending
+      author: khanhspring
+      changes:
+        - sqlFile:
+            splitStatements: true
+            path: db/changelog/scripts/0.0.1__010__create_table_form_ending.sql

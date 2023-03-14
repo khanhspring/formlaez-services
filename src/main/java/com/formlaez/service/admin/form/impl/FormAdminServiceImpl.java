@@ -80,7 +80,7 @@ public class FormAdminServiceImpl implements FormAdminService {
 
     @Override
     @Transactional
-    public Long create(CreateFormRequest request) {
+    public String create(CreateFormRequest request) {
         var workspace = jpaWorkspaceRepository.findById(request.getWorkspaceId())
                 .orElseThrow(InvalidParamsException::new);
 
@@ -134,7 +134,7 @@ public class FormAdminServiceImpl implements FormAdminService {
                 .build();
         jpaFormPageRepository.save(firstPage);
 
-        return form.getId();
+        return form.getCode();
     }
 
     @Override

@@ -30,6 +30,8 @@ public class FormResponse {
     private boolean allowResponseEditing;
     private List<FormPageResponse> pages;
 
+    private FormEndingResponse ending;
+
     private Instant createdDate;
     private Instant lastModifiedDate;
 }

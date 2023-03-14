@@ -4,6 +4,7 @@ import com.formlaez.application.model.request.CreateFormRequest;
 import com.formlaez.application.model.request.SearchFormRequest;
 import com.formlaez.application.model.request.UpdateFormRequest;
 import com.formlaez.application.model.request.UpdateFormSettingsRequest;
+import com.formlaez.application.model.response.ResponseCode;
 import com.formlaez.application.model.response.ResponseId;
 import com.formlaez.application.model.response.form.BasicFormResponse;
 import com.formlaez.application.model.response.form.FormResponse;
@@ -40,8 +41,8 @@ public class FormAdminController {
     }
 
     @PostMapping
-    public ResponseId<Long> create(@Valid @RequestBody CreateFormRequest request) {
-        return ResponseId.of(formAdminService.create(request));
+    public ResponseCode create(@Valid @RequestBody CreateFormRequest request) {
+        return ResponseCode.of(formAdminService.create(request));
     }
 
     @PutMapping("{formId}")

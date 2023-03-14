@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface JpaFormDocumentTemplateRepository extends JpaRepository<JpaFormDocumentTemplate, Long> {
 
     @Query("select o from JpaFormDocumentTemplate o" +
@@ -15,4 +17,6 @@ public interface JpaFormDocumentTemplateRepository extends JpaRepository<JpaForm
             " and o.form.id = :#{#request.formId}" +
             " and (:#{#request.keyword == null} = true or o.title like %:#{#request.keyword}% or o.description like %:#{#request.keyword}%)")
     Page<JpaFormDocumentTemplate> search(@Param("request") SearchFormDocumentTemplateRequest request, Pageable pageable);
+
+    List<JpaFormDocumentTemplate> findAllByFormIdOrderByCreatedDateDesc(Long formId);
 }

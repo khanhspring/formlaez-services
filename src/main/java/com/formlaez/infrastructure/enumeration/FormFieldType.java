@@ -11,6 +11,8 @@ public enum FormFieldType {
     Video(false),
     Pdf(false),
     Line(false),
+    QRCode(false),
+    TwitterTweet(false),
 
     InputText(true),
     InputNumber(true),

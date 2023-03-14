@@ -27,6 +27,7 @@ public class BasicFormResponse {
     private boolean acceptResponses;
     private boolean allowPrinting;
     private boolean allowResponseEditing;
+    private FormEndingResponse ending;
     private Instant createdDate;
     private Instant lastModifiedDate;
 }

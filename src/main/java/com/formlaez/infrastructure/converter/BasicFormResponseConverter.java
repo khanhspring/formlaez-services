@@ -13,6 +13,8 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class BasicFormResponseConverter implements Converter<JpaForm, BasicFormResponse> {
 
+    private final FormEndingResponseConverter formEndingResponseConverter;
+
     @Nullable
     @Override
     public BasicFormResponse convert(@Nullable JpaForm source) {
@@ -34,6 +36,7 @@ public class BasicFormResponseConverter implements Converter<JpaForm, BasicFormR
                 .allowResponseEditing(source.isAllowResponseEditing())
                 .createdDate(source.getCreatedDate())
                 .lastModifiedDate(source.getLastModifiedDate())
+                .ending(formEndingResponseConverter.convert(source.getFormEnding()))
                 .build();
     }
 }
