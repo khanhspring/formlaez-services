@@ -37,6 +37,14 @@ public class ResourceServerConfig {
                 .csrf().disable()
                 .authorizeHttpRequests()
                 .requestMatchers("/ping/**", "/auth/token/**").permitAll()
+                .requestMatchers(
+                        "/forms/{formCode}/submissions",
+                        "/submissions/{submissionCode}/document-merge",
+                        "/document-templates",
+                        "/document-templates",
+                        "/forms/{formCode}",
+                        "/forms/{formCode}/detail"
+                ).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .oauth2ResourceServer()

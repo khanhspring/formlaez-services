@@ -26,7 +26,7 @@ public class FormSubmissionController {
         return ResponseCode.of(formSubmissionService.create(request));
     }
 
-    @PostMapping("submissions/{submissionCode}/document-merge")
+    @PostMapping("/submissions/{submissionCode}/document-merge")
     public ResponseEntity<Resource> mergeDocument(@PathVariable String submissionCode,
                                                   @RequestBody @Valid MergeDocumentFormSubmissionRequest request) {
         request.setCode(submissionCode);

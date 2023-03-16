@@ -1,6 +1,7 @@
 package com.formlaez.service.helper;
 
 import com.formlaez.infrastructure.configuration.exception.ForbiddenException;
+import com.formlaez.infrastructure.configuration.exception.UnauthorizedException;
 import com.formlaez.infrastructure.enumeration.FormSharingScope;
 import com.formlaez.infrastructure.enumeration.FormStatus;
 import com.formlaez.infrastructure.model.entity.form.JpaForm;
@@ -19,13 +20,36 @@ public class PublishedFormAccessHelper {
         if (!form.isAcceptResponses()) {
             throw new ForbiddenException();
         }
-        if (!isFormOwner(form) && form.getSharingScope() != FormSharingScope.Public) {
+        checkAuthenticatedAccess(form);
+        checkUnauthenticatedAccess(form);
+    }
+
+    private boolean isFormOwner(JpaForm form) {
+        var currentUserId = AuthUtils.currentUserId();
+        return currentUserId.map(uuid -> uuid.equals(form.getCreatedBy()))
+                .orElse(false);
+    }
+
+    private void checkAuthenticatedAccess(JpaForm form) {
+        if (!AuthUtils.isAuthenticated()) {
+            // return to continue next steps
+            return;
+        }
+        if (isFormOwner(form)) {
+            // the form owner can access their form in any sharing scope
+            return;
+        }
+        if (form.getSharingScope().getLevel() < FormSharingScope.Authenticated.getLevel()) {
             throw new ForbiddenException();
         }
     }
 
-    private boolean isFormOwner(JpaForm form) {
-        var currentUserId = AuthUtils.currentUserIdOrElseThrow();
-        return currentUserId.equals(form.getCreatedBy());
+    private void checkUnauthenticatedAccess(JpaForm form) {
+        if (AuthUtils.isAuthenticated()) {
+            return;
+        }
+        if (form.getSharingScope() != FormSharingScope.Public) {
+            throw new UnauthorizedException();
+        }
     }
 }
