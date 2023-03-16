@@ -16,6 +16,9 @@ public class PublishedFormAccessHelper {
         if (form.getStatus() != FormStatus.Published) {
             throw new ForbiddenException();
         }
+        if (!form.isAcceptResponses()) {
+            throw new ForbiddenException();
+        }
         if (!isFormOwner(form) && form.getSharingScope() != FormSharingScope.Public) {
             throw new ForbiddenException();
         }
