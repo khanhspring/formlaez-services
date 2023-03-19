@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import static com.formlaez.infrastructure.enumeration.TeamMemberRole.Owner;
 
@@ -40,10 +41,11 @@ public class TeamMemberAdminServiceImpl implements TeamMemberAdminService {
         var user = jpaUserRepository.findById(request.getUserId())
                 .orElseThrow(InvalidParamsException::new);
 
+        Assert.isTrue(request.getRole() != TeamMemberRole.Owner, "Can not add a member as team Owner");
         var member = JpaTeamMember.builder()
                 .user(user)
                 .team(team)
-                .role(TeamMemberRole.Member)
+                .role(request.getRole())
                 .build();
         return jpaTeamMemberRepository.save(member)
                 .getId();
@@ -59,7 +61,7 @@ public class TeamMemberAdminServiceImpl implements TeamMemberAdminService {
         if (member.getRole() == Owner) {
             throw new ApplicationException("Can not remove the owner from their team");
         }
-        teamHelper.currentUserMustBeOwnerOrAdmin(request.getTeamId());
+        teamHelper.currentUserMustBeOwner(request.getTeamId());
 
         jpaTeamMemberRepository.delete(member);
     }
@@ -69,7 +71,7 @@ public class TeamMemberAdminServiceImpl implements TeamMemberAdminService {
         var existing = jpaTeamMemberRepository.findByUserIdAndTeamId(request.getUserId(), request.getTeamId())
                 .orElseThrow(ResourceNotFoundException::new);
 
-        teamHelper.currentUserMustBeOwnerOrAdmin(request.getTeamId());
+        teamHelper.currentUserMustBeOwner(request.getTeamId());
 
         existing.setRole(request.getRole());
         jpaTeamMemberRepository.delete(existing);

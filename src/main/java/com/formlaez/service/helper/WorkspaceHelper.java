@@ -7,11 +7,6 @@ import com.formlaez.infrastructure.util.AuthUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
-import static com.formlaez.infrastructure.enumeration.WorkspaceMemberRole.Admin;
-import static com.formlaez.infrastructure.enumeration.WorkspaceMemberRole.Owner;
-
 @Component
 @RequiredArgsConstructor
 public class WorkspaceHelper {
@@ -23,8 +18,7 @@ public class WorkspaceHelper {
         var currentUserMember = jpaWorkspaceMemberRepository.findByUserIdAndWorkspaceId(currentUserId, workspaceId)
                 .orElseThrow(ForbiddenException::new);
 
-        List<WorkspaceMemberRole> hasPermissionRoles = List.of(Owner, Admin);
-        if (!hasPermissionRoles.contains(currentUserMember.getRole())) {
+        if (currentUserMember.getRole() != WorkspaceMemberRole.Owner) {
             throw new ForbiddenException();
         }
     }

@@ -14,6 +14,7 @@ import com.formlaez.infrastructure.converter.FormResponseConverter;
 import com.formlaez.infrastructure.enumeration.FormScope;
 import com.formlaez.infrastructure.enumeration.FormSharingScope;
 import com.formlaez.infrastructure.enumeration.FormStatus;
+import com.formlaez.infrastructure.enumeration.WorkspaceMemberRole;
 import com.formlaez.infrastructure.model.entity.form.JpaForm;
 import com.formlaez.infrastructure.model.entity.form.JpaFormPage;
 import com.formlaez.infrastructure.model.entity.team.JpaTeam;
@@ -84,6 +85,8 @@ public class FormAdminServiceImpl implements FormAdminService {
         var workspace = jpaWorkspaceRepository.findById(request.getWorkspaceId())
                 .orElseThrow(InvalidParamsException::new);
 
+        var currentUserId = AuthUtils.currentUserIdOrElseThrow();
+
         JpaTeam team = null;
         if (request.getScope() == FormScope.Team) {
             Assert.notNull(request.getTeamId(), "Team id is required");
@@ -92,16 +95,16 @@ public class FormAdminServiceImpl implements FormAdminService {
 
             Assert.isTrue(workspace.getId().equals(team.getWorkspace().getId()), "Team id is not belong to workspace id");
 
-            var currentUserId = AuthUtils.currentUserIdOrElseThrow();
+            var workspaceMember = jpaWorkspaceMemberRepository.findByUserIdAndWorkspaceId(currentUserId, request.getWorkspaceId())
+                    .orElseThrow();
             var isTeamMember = jpaTeamMemberRepository.existsByUserIdAndTeamId(currentUserId, team.getId());
-            if (!isTeamMember) {
+            if (!isTeamMember && workspaceMember.getRole() != WorkspaceMemberRole.Owner) {
                 log.error("User is not a member of the team, user id [{}], team id [{}]", currentUserId, team.getId());
                 throw new ForbiddenException();
             }
         }
 
         if (request.getScope() == FormScope.Private) {
-            var currentUserId = AuthUtils.currentUserIdOrElseThrow();
             var isWorkspaceMember = jpaWorkspaceMemberRepository.existsByUserIdAndWorkspaceId(currentUserId, workspace.getId());
             if (!isWorkspaceMember) {
                 log.error("User is not a member of the workspace, user id [{}], workspace id [{}]", currentUserId, workspace.getId());

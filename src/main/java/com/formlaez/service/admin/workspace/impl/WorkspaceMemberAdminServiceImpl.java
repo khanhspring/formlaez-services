@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import static com.formlaez.infrastructure.enumeration.WorkspaceMemberRole.Owner;
 
@@ -40,10 +41,11 @@ public class WorkspaceMemberAdminServiceImpl implements WorkspaceMemberAdminServ
         var user = jpaUserRepository.findById(request.getUserId())
                 .orElseThrow(InvalidParamsException::new);
 
+        Assert.isTrue(request.getRole() != Owner, "Can not add a member as workspace Owner");
         var member = JpaWorkspaceMember.builder()
                 .user(user)
                 .workspace(workspace)
-                .role(WorkspaceMemberRole.Member)
+                .role(request.getRole())
                 .build();
         return jpaWorkspaceMemberRepository.save(member)
                 .getId();

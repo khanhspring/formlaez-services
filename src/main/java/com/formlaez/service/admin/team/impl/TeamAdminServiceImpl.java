@@ -9,12 +9,10 @@ import com.formlaez.infrastructure.configuration.exception.ResourceNotFoundExcep
 import com.formlaez.infrastructure.configuration.exception.UnauthorizedException;
 import com.formlaez.infrastructure.converter.TeamResponseConverter;
 import com.formlaez.infrastructure.enumeration.TeamMemberRole;
+import com.formlaez.infrastructure.enumeration.WorkspaceMemberRole;
 import com.formlaez.infrastructure.model.entity.team.JpaTeam;
 import com.formlaez.infrastructure.model.entity.team.JpaTeamMember;
-import com.formlaez.infrastructure.repository.JpaTeamMemberRepository;
-import com.formlaez.infrastructure.repository.JpaTeamRepository;
-import com.formlaez.infrastructure.repository.JpaUserRepository;
-import com.formlaez.infrastructure.repository.JpaWorkspaceRepository;
+import com.formlaez.infrastructure.repository.*;
 import com.formlaez.infrastructure.util.AuthUtils;
 import com.formlaez.infrastructure.util.RandomUtils;
 import com.formlaez.service.admin.team.TeamAdminService;
@@ -32,12 +30,22 @@ public class TeamAdminServiceImpl implements TeamAdminService {
     private final JpaTeamMemberRepository jpaTeamMemberRepository;
     private final JpaUserRepository jpaUserRepository;
     private final JpaWorkspaceRepository jpaWorkspaceRepository;
+    private final JpaWorkspaceMemberRepository jpaWorkspaceMemberRepository;
     private final TeamHelper teamHelper;
     private final TeamResponseConverter teamResponseConverter;
 
     @Override
     @Transactional(readOnly = true)
     public Page<TeamResponse> search(SearchTeamRequest request, Pageable pageable) {
+        var currentUserId = AuthUtils.currentUserIdOrElseThrow();
+        var member = jpaWorkspaceMemberRepository.findByUserIdAndWorkspaceId(currentUserId, request.getWorkspaceId())
+                .orElseThrow();
+
+        if (member.getRole() == WorkspaceMemberRole.Member) {
+            // If the user is not an owner or admin => only can see only joined teams
+            request.setMemberId(currentUserId);
+        }
+
         return jpaTeamRepository.search(request, pageable)
                 .map(teamResponseConverter::convert);
     }
@@ -77,7 +85,7 @@ public class TeamAdminServiceImpl implements TeamAdminService {
         var existing = jpaTeamRepository.findById(request.getId())
                 .orElseThrow(ResourceNotFoundException::new);
 
-        teamHelper.currentUserMustBeOwnerOrAdmin(request.getId());
+        teamHelper.currentUserMustBeOwner(request.getId());
 
         existing.setName(request.getName());
         existing.setDescription(request.getDescription());

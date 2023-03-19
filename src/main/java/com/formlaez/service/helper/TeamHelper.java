@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static com.formlaez.infrastructure.enumeration.TeamMemberRole.Admin;
 import static com.formlaez.infrastructure.enumeration.TeamMemberRole.Owner;
 
 @Component
@@ -18,12 +17,12 @@ public class TeamHelper {
 
     private final JpaTeamMemberRepository jpaTeamMemberRepository;
 
-    public void currentUserMustBeOwnerOrAdmin(Long teamId) {
+    public void currentUserMustBeOwner(Long teamId) {
         var currentUserId = AuthUtils.currentUserIdOrElseThrow();
         var currentUserMember = jpaTeamMemberRepository.findByUserIdAndTeamId(currentUserId, teamId)
                 .orElseThrow(ForbiddenException::new);
 
-        List<TeamMemberRole> hasPermissionRoles = List.of(Owner, Admin);
+        List<TeamMemberRole> hasPermissionRoles = List.of(Owner);
         if (!hasPermissionRoles.contains(currentUserMember.getRole())) {
             throw new ForbiddenException();
         }

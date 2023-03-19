@@ -4,8 +4,10 @@ import com.formlaez.infrastructure.configuration.exception.ForbiddenException;
 import com.formlaez.infrastructure.enumeration.FormScope;
 import com.formlaez.infrastructure.enumeration.FormSharingScope;
 import com.formlaez.infrastructure.enumeration.FormStatus;
+import com.formlaez.infrastructure.enumeration.WorkspaceMemberRole;
 import com.formlaez.infrastructure.model.entity.form.JpaForm;
 import com.formlaez.infrastructure.repository.JpaTeamMemberRepository;
+import com.formlaez.infrastructure.repository.JpaWorkspaceMemberRepository;
 import com.formlaez.infrastructure.util.AuthUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class FormAdminAccessHelper {
 
     private final JpaTeamMemberRepository jpaTeamMemberRepository;
+    private final JpaWorkspaceMemberRepository jpaWorkspaceMemberRepository;
 
     @Transactional(readOnly = true)
     public void checkAccess(JpaForm form) {
@@ -30,7 +33,9 @@ public class FormAdminAccessHelper {
             var team = form.getTeam();
             var currentUserId = AuthUtils.currentUserIdOrElseThrow();
             var isTeamMember = jpaTeamMemberRepository.existsByUserIdAndTeamId(currentUserId, team.getId());
-            if (!isTeamMember) {
+            var workspaceMember = jpaWorkspaceMemberRepository.findByUserIdAndWorkspaceId(currentUserId, team.getWorkspace().getId())
+                    .orElseThrow();
+            if (!isTeamMember && workspaceMember.getRole() != WorkspaceMemberRole.Owner) {
                 throw new ForbiddenException();
             }
         }

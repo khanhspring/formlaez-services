@@ -19,4 +19,6 @@ public class SearchFormRequest {
 
     private UUID createdBy;
     private Long teamId;
+    @NotNull
+    private Long workspaceId;
 }
