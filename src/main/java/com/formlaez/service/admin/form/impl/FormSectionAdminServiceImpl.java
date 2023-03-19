@@ -12,6 +12,7 @@ import com.formlaez.infrastructure.repository.JpaFormFieldOptionRepository;
 import com.formlaez.infrastructure.repository.JpaFormFieldRepository;
 import com.formlaez.infrastructure.repository.JpaFormPageRepository;
 import com.formlaez.infrastructure.repository.JpaFormSectionRepository;
+import com.formlaez.service.admin.form.FormFieldAdminService;
 import com.formlaez.service.admin.form.FormSectionAdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,7 @@ public class FormSectionAdminServiceImpl implements FormSectionAdminService {
     private final JpaFormPageRepository jpaFormPageRepository;
     private final JpaFormFieldRepository jpaFormFieldRepository;
     private final JpaFormFieldOptionRepository jpaFormFieldOptionRepository;
+    private final FormFieldAdminService formFieldAdminService;
 
     @Override
     @Transactional
@@ -59,25 +61,15 @@ public class FormSectionAdminServiceImpl implements FormSectionAdminService {
                 .page(formPage)
                 .build();
 
-        var sectionSaved = jpaFormSectionRepository.save(section);
+        section = jpaFormSectionRepository.save(section);
 
         if (!ObjectUtils.isEmpty(request.getFields())) {
-            request.getFields().forEach(field -> {
-                var jpaField = JpaFormField.builder()
-                        .code(field.getCode())
-                        .variableName(field.getVariableName())
-                        .title(Objects.requireNonNullElse(field.getTitle(), "Untitled"))
-                        .description(field.getDescription())
-                        .placeholder(field.getPlaceholder())
-                        .type(field.getType())
-                        .required(field.isRequired())
-                        .position(field.getPosition())
-                        .section(sectionSaved)
-                        .build();
-                jpaFormFieldRepository.save(jpaField);
-            });
+            for (var field : request.getFields()) {
+                field.setSectionCode(section.getCode());
+                formFieldAdminService.create(field);
+            }
         }
-        return sectionSaved.getId();
+        return section.getId();
     }
 
     @Override

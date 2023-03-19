@@ -14,6 +14,7 @@ import java.util.Objects;
 public class BasicFormResponseConverter implements Converter<JpaForm, BasicFormResponse> {
 
     private final FormEndingResponseConverter formEndingResponseConverter;
+    private final TeamResponseConverter teamResponseConverter;
 
     @Nullable
     @Override
@@ -26,6 +27,7 @@ public class BasicFormResponseConverter implements Converter<JpaForm, BasicFormR
                 .title(source.getTitle())
                 .description(source.getDescription())
                 .code(source.getCode())
+                .scope(source.getScope())
                 .coverType(source.getCoverType())
                 .coverColor(source.getCoverColor())
                 .coverImageUrl(source.getCoverImageUrl())
@@ -37,6 +39,7 @@ public class BasicFormResponseConverter implements Converter<JpaForm, BasicFormR
                 .createdDate(source.getCreatedDate())
                 .lastModifiedDate(source.getLastModifiedDate())
                 .ending(formEndingResponseConverter.convert(source.getFormEnding()))
+                .team(teamResponseConverter.convert(source.getTeam()))
                 .build();
     }
 }

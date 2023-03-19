@@ -1,6 +1,5 @@
 package com.formlaez.service.admin.form.impl;
 
-import com.aventrix.jnanoid.jnanoid.NanoIdUtils;
 import com.formlaez.application.model.request.CreateFormRequest;
 import com.formlaez.application.model.request.SearchFormRequest;
 import com.formlaez.application.model.request.UpdateFormRequest;
@@ -12,16 +11,15 @@ import com.formlaez.infrastructure.configuration.exception.InvalidParamsExceptio
 import com.formlaez.infrastructure.configuration.exception.ResourceNotFoundException;
 import com.formlaez.infrastructure.converter.BasicFormResponseConverter;
 import com.formlaez.infrastructure.converter.FormResponseConverter;
-import com.formlaez.infrastructure.enumeration.FormCoverType;
 import com.formlaez.infrastructure.enumeration.FormScope;
 import com.formlaez.infrastructure.enumeration.FormSharingScope;
 import com.formlaez.infrastructure.enumeration.FormStatus;
-import com.formlaez.infrastructure.model.entity.JpaWorkspace;
 import com.formlaez.infrastructure.model.entity.form.JpaForm;
 import com.formlaez.infrastructure.model.entity.form.JpaFormPage;
 import com.formlaez.infrastructure.model.entity.team.JpaTeam;
 import com.formlaez.infrastructure.repository.*;
 import com.formlaez.infrastructure.util.AuthUtils;
+import com.formlaez.infrastructure.util.RandomUtils;
 import com.formlaez.service.admin.form.FormAdminService;
 import com.formlaez.service.helper.FormAdminAccessHelper;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +30,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import static com.formlaez.infrastructure.enumeration.FormStatus.Archived;
 import static com.formlaez.infrastructure.enumeration.FormStatus.Deleted;
 
 @Slf4j
@@ -55,6 +52,9 @@ public class FormAdminServiceImpl implements FormAdminService {
     public Page<BasicFormResponse> search(SearchFormRequest request, Pageable pageable) {
         if (request.getScope() == FormScope.Private) {
             request.setCreatedBy(AuthUtils.currentUserIdOrElseThrow());
+        }
+        if (request.getScope() == FormScope.Team) {
+            Assert.notNull(request.getTeamId(), "Team id is required");
         }
         return jpaFormRepository.search(request, pageable)
                 .map(basicFormResponseConverter::convert);
@@ -110,11 +110,13 @@ public class FormAdminServiceImpl implements FormAdminService {
         }
 
         var form = JpaForm.builder()
-                .code(NanoIdUtils.randomNanoId())
+                .code(RandomUtils.randomNanoId())
                 .scope(request.getScope())
                 .title(request.getTitle())
                 .description(request.getDescription())
-                .coverType(FormCoverType.None)
+                .coverType(request.getCoverType())
+                .coverColor(request.getCoverColor())
+                .coverImageUrl(request.getCoverImageUrl())
                 .status(FormStatus.Draft)
                 .sharingScope(FormSharingScope.Public)
                 .allowPrinting(false)
@@ -127,7 +129,7 @@ public class FormAdminServiceImpl implements FormAdminService {
 
         // init default page
         var firstPage = JpaFormPage.builder()
-                .code(NanoIdUtils.randomNanoId())
+                .code(RandomUtils.randomNanoId())
                 .title("Untitled Page")
                 .position(0)
                 .form(form)

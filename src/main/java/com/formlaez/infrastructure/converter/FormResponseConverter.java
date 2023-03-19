@@ -15,6 +15,8 @@ public class FormResponseConverter implements Converter<JpaForm, FormResponse> {
 
     private final FormPageResponseConverter formPageResponseConverter;
     private final FormEndingResponseConverter formEndingResponseConverter;
+    private final TeamResponseConverter teamResponseConverter;
+    private final WorkspaceResponseConverter workspaceResponseConverter;
 
     @Nullable
     @Override
@@ -27,6 +29,7 @@ public class FormResponseConverter implements Converter<JpaForm, FormResponse> {
                 .title(source.getTitle())
                 .description(source.getDescription())
                 .code(source.getCode())
+                .scope(source.getScope())
                 .coverType(source.getCoverType())
                 .coverColor(source.getCoverColor())
                 .coverImageUrl(source.getCoverImageUrl())
@@ -39,6 +42,8 @@ public class FormResponseConverter implements Converter<JpaForm, FormResponse> {
                 .lastModifiedDate(source.getLastModifiedDate())
                 .pages(formPageResponseConverter.convert(source.getPages()))
                 .ending(formEndingResponseConverter.convert(source.getFormEnding()))
+                .team(teamResponseConverter.convert(source.getTeam()))
+                .workspace(workspaceResponseConverter.convert(source.getWorkspace()))
                 .build();
     }
 }

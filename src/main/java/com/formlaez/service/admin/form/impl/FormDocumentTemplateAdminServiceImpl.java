@@ -1,6 +1,5 @@
 package com.formlaez.service.admin.form.impl;
 
-import com.aventrix.jnanoid.jnanoid.NanoIdUtils;
 import com.formlaez.application.model.request.CreateFormDocumentTemplateRequest;
 import com.formlaez.application.model.request.SearchFormDocumentTemplateRequest;
 import com.formlaez.application.model.request.UpdateFormDocumentTemplateRequest;
@@ -16,6 +15,7 @@ import com.formlaez.infrastructure.repository.JpaAttachmentRepository;
 import com.formlaez.infrastructure.repository.JpaFormDocumentTemplateRepository;
 import com.formlaez.infrastructure.repository.JpaFormRepository;
 import com.formlaez.infrastructure.util.AttachmentUtils;
+import com.formlaez.infrastructure.util.RandomUtils;
 import com.formlaez.service.admin.form.FormDocumentTemplateAdminService;
 import com.formlaez.service.storage.CloudStorageService;
 import lombok.RequiredArgsConstructor;
@@ -64,7 +64,7 @@ public class FormDocumentTemplateAdminServiceImpl implements FormDocumentTemplat
         Assert.notNull(extension, "File extension is invalid");
         Assert.isTrue(extension.toLowerCase().matches(ACCEPTED_EXTENSIONS), "File extension is not supported");
 
-        var attachmentCode = NanoIdUtils.randomNanoId();
+        var attachmentCode = RandomUtils.randomNanoId();
         var fileName = String.format("%s.%s", attachmentCode, extension);
         var cloudStorageLocation = AttachmentUtils.documentTemplateLocation(form.getWorkspace().getCode(), form.getCode());
 
@@ -82,7 +82,7 @@ public class FormDocumentTemplateAdminServiceImpl implements FormDocumentTemplat
         attachment = jpaAttachmentRepository.save(attachment);
 
         var documentTemplate = JpaFormDocumentTemplate.builder()
-                .code(NanoIdUtils.randomNanoId())
+                .code(RandomUtils.randomNanoId())
                 .title(request.getTitle())
                 .description(request.getDescription())
                 .attachment(attachment)

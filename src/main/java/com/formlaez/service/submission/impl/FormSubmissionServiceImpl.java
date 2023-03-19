@@ -1,6 +1,5 @@
 package com.formlaez.service.submission.impl;
 
-import com.aventrix.jnanoid.jnanoid.NanoIdUtils;
 import com.formlaez.application.model.request.CreateFormSubmissionRequest;
 import com.formlaez.application.model.request.MergeDocumentFormSubmissionRequest;
 import com.formlaez.infrastructure.configuration.exception.ForbiddenException;
@@ -10,6 +9,7 @@ import com.formlaez.infrastructure.enumeration.FormSubmissionStatus;
 import com.formlaez.infrastructure.model.entity.form.JpaFormSubmission;
 import com.formlaez.infrastructure.repository.JpaFormRepository;
 import com.formlaez.infrastructure.repository.JpaFormSubmissionRepository;
+import com.formlaez.infrastructure.util.RandomUtils;
 import com.formlaez.service.helper.FormSubmissionDocumentMergeHelper;
 import com.formlaez.service.share.FormSubmissionSnapshotService;
 import com.formlaez.service.submission.FormSubmissionService;
@@ -33,7 +33,7 @@ public class FormSubmissionServiceImpl implements FormSubmissionService {
                 .orElseThrow(InvalidParamsException::new);
 
         var submission = JpaFormSubmission.builder()
-                .code(NanoIdUtils.randomNanoId())
+                .code(RandomUtils.randomNanoId())
                 .form(form)
                 .data(request.getData())
                 .status(FormSubmissionStatus.Active)

@@ -1,5 +1,6 @@
 package com.formlaez.infrastructure.repository;
 
+import com.formlaez.infrastructure.model.entity.JpaWorkspaceMember;
 import com.formlaez.infrastructure.model.entity.team.JpaTeamMember;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -1,5 +1,6 @@
 package com.formlaez.application.model.response.form;
 
+import com.formlaez.application.model.response.TeamResponse;
 import com.formlaez.infrastructure.enumeration.FormCoverType;
 import com.formlaez.infrastructure.enumeration.FormScope;
 import com.formlaez.infrastructure.enumeration.FormSharingScope;
@@ -28,6 +29,9 @@ public class BasicFormResponse {
     private boolean allowPrinting;
     private boolean allowResponseEditing;
     private FormEndingResponse ending;
+
+    private TeamResponse team;
+
     private Instant createdDate;
     private Instant lastModifiedDate;
 }

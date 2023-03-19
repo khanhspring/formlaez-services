@@ -18,6 +18,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {UnauthorizedException.class})
     @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
     public ErrorResponse handle(UnauthorizedException e) {
+        log.error("", e);
         return ErrorResponse.builder()
                 .code(e.getCode())
                 .message(e.getMessage())
@@ -27,6 +28,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {ForbiddenException.class})
     @ResponseStatus(value = HttpStatus.FORBIDDEN)
     public ErrorResponse handle(ForbiddenException e) {
+        log.error("", e);
         return ErrorResponse.builder()
                 .code(e.getCode())
                 .message(e.getMessage())
@@ -36,6 +38,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {AccessDeniedException.class})
     @ResponseStatus(value = HttpStatus.FORBIDDEN)
     public ErrorResponse handle(AccessDeniedException e) {
+        log.error("", e);
         return ErrorResponse.builder()
                 .code(CommonError.Forbidden.getCode())
                 .message(CommonError.Forbidden.getMessage())
@@ -45,6 +48,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {ResourceNotFoundException.class})
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     public ErrorResponse handle(ResourceNotFoundException e) {
+        log.error("", e);
         return ErrorResponse.builder()
                 .code(e.getCode())
                 .message(e.getMessage())
@@ -54,6 +58,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {ApplicationException.class})
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ErrorResponse handle(ApplicationException e) {
+        log.error("", e);
         return ErrorResponse.builder()
                 .code(e.getCode())
                 .message(e.getMessage())
@@ -63,7 +68,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {Exception.class})
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handle(Exception e) {
-        e.printStackTrace();
+        log.error("", e);
         return ErrorResponse.builder()
                 .code(CommonError.SystemBusy.getCode())
                 .message(CommonError.SystemBusy.getMessage())

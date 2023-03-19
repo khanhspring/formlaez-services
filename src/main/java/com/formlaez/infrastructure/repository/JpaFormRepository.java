@@ -23,6 +23,7 @@ public interface JpaFormRepository extends JpaRepository<JpaForm, Long> {
             " and o.status != com.formlaez.infrastructure.enumeration.FormStatus.Deleted" +
             " and (:#{#request.keyword == null} = true or o.title like %:#{#request.keyword}% or o.description like %:#{#request.keyword}%)" +
             " and (:#{#request.scope == null} = true or o.scope = :#{#request.scope})" +
+            " and (:#{#request.teamId == null} = true or o.team.id = :#{#request.teamId})" +
             " and (:#{#request.createdBy == null} = true or o.createdBy = :#{#request.createdBy})")
     Page<JpaForm> search(@Param("request") SearchFormRequest request, Pageable pageable);
 }

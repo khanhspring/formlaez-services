@@ -15,5 +15,5 @@ public interface WorkspaceMemberAdminService {
 
     void updateRole(UpdateWorkspaceMemberRoleRequest request);
 
-    Page<WorkspaceMemberResponse> searchMembers(SearchWorkspaceMemberRequest request, Pageable pageable);
+    Page<WorkspaceMemberResponse> search(SearchWorkspaceMemberRequest request, Pageable pageable);
 }

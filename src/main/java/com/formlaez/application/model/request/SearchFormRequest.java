@@ -18,4 +18,5 @@ public class SearchFormRequest {
     private FormScope scope;
 
     private UUID createdBy;
+    private Long teamId;
 }

@@ -1,6 +1,6 @@
 package com.formlaez.application.model.response;
 
-import com.formlaez.infrastructure.enumeration.WorkspaceMemberRole;
+import com.formlaez.infrastructure.enumeration.TeamMemberRole;
 import lombok.*;
 
 import java.time.Instant;
@@ -10,8 +10,8 @@ import java.time.Instant;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class WorkspaceMemberResponse {
+public class TeamMemberResponse {
     private UserResponse user;
-    private WorkspaceMemberRole role;
+    private TeamMemberRole role;
     private Instant joinedDate;
 }

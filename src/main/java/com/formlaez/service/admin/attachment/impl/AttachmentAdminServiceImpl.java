@@ -1,11 +1,11 @@
 package com.formlaez.service.admin.attachment.impl;
 
-import com.aventrix.jnanoid.jnanoid.NanoIdUtils;
 import com.formlaez.application.model.request.CreateAttachmentRequest;
 import com.formlaez.application.model.response.PresignedUrlResponse;
 import com.formlaez.infrastructure.configuration.exception.ResourceNotFoundException;
 import com.formlaez.infrastructure.model.entity.JpaAttachment;
 import com.formlaez.infrastructure.repository.JpaAttachmentRepository;
+import com.formlaez.infrastructure.util.RandomUtils;
 import com.formlaez.service.admin.attachment.AttachmentAdminService;
 import com.formlaez.service.storage.CloudStorageService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ public class AttachmentAdminServiceImpl implements AttachmentAdminService {
     @Transactional
     public Long create(CreateAttachmentRequest request) {
         var attachment = JpaAttachment.builder()
-                .code(NanoIdUtils.randomNanoId())
+                .code(RandomUtils.randomNanoId())
                 .type(request.getType())
                 .name(request.getName())
                 .originalName(request.getOriginalName())

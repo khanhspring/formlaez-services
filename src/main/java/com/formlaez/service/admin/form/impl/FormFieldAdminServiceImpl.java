@@ -57,10 +57,40 @@ public class FormFieldAdminServiceImpl implements FormFieldAdminService {
                 .placeholder(request.getPlaceholder())
                 .type(request.getType())
                 .required(request.isRequired())
+                .acceptedDomains(request.getAcceptedDomains())
+                .caption(request.getCaption())
+                .content(request.getContent())
+                .min(request.getMin())
+                .max(request.getMax())
+                .minLength(request.getMinLength())
+                .maxLength(request.getMaxLength())
+                .hideTitle(request.isHideTitle())
+                .multipleSelection(request.isMultipleSelection())
+                .url(request.getUrl())
+                .readonly(request.isReadonly())
+                .showTime(request.isShowTime())
+                .content(request.getContent())
                 .position(request.getPosition())
                 .section(section)
                 .build();
-        return jpaFormFieldRepository.save(field).getId();
+
+        field = jpaFormFieldRepository.save(field);
+
+        if (!ObjectUtils.isEmpty(request.getOptions())) {
+            List<JpaFormFieldOption> options = new ArrayList<>();
+            int optionPosition = 0;
+            for (var option : request.getOptions()) {
+                var jpaOption = JpaFormFieldOption.builder()
+                        .code(option.getCode())
+                        .label(option.getLabel())
+                        .field(field)
+                        .position(optionPosition++)
+                        .build();
+                options.add(jpaOption);
+            }
+            jpaFormFieldOptionRepository.saveAll(options);
+        }
+        return field.getId();
     }
 
     @Override

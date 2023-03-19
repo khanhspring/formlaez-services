@@ -76,7 +76,7 @@ public class WorkspaceMemberAdminServiceImpl implements WorkspaceMemberAdminServ
     }
 
     @Override
-    public Page<WorkspaceMemberResponse> searchMembers(SearchWorkspaceMemberRequest request, Pageable pageable) {
+    public Page<WorkspaceMemberResponse> search(SearchWorkspaceMemberRequest request, Pageable pageable) {
         var memberPage = jpaWorkspaceMemberRepository.findByWorkspaceId(request.getWorkspaceId(), pageable);
         return memberPage.map(this::toResponse);
     }
@@ -85,6 +85,7 @@ public class WorkspaceMemberAdminServiceImpl implements WorkspaceMemberAdminServ
         return WorkspaceMemberResponse.builder()
                 .user(userResponseConverter.convert(member.getUser()))
                 .role(member.getRole())
+                .joinedDate(member.getCreatedDate())
                 .build();
     }
 }

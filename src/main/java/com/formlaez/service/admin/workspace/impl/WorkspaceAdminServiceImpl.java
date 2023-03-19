@@ -16,13 +16,12 @@ import com.formlaez.infrastructure.repository.JpaUserRepository;
 import com.formlaez.infrastructure.repository.JpaWorkspaceMemberRepository;
 import com.formlaez.infrastructure.repository.JpaWorkspaceRepository;
 import com.formlaez.infrastructure.util.AuthUtils;
+import com.formlaez.infrastructure.util.RandomUtils;
 import com.formlaez.service.admin.workspace.WorkspaceAdminService;
 import com.formlaez.service.helper.WorkspaceHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import static com.formlaez.infrastructure.util.StringUtils.randomCode;
 
 @Service
 @RequiredArgsConstructor
@@ -42,7 +41,7 @@ public class WorkspaceAdminServiceImpl implements WorkspaceAdminService {
         }
 
         var entity = JpaWorkspace.builder()
-                .code(randomCode())
+                .code(RandomUtils.randomNanoId(7))
                 .description(request.getDescription())
                 .name(request.getName())
                 .type(WorkspaceType.Free)

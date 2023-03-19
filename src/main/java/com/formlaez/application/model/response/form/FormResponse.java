@@ -1,5 +1,7 @@
 package com.formlaez.application.model.response.form;
 
+import com.formlaez.application.model.response.TeamResponse;
+import com.formlaez.application.model.response.WorkspaceResponse;
 import com.formlaez.infrastructure.enumeration.FormCoverType;
 import com.formlaez.infrastructure.enumeration.FormScope;
 import com.formlaez.infrastructure.enumeration.FormSharingScope;
@@ -31,6 +33,8 @@ public class FormResponse {
     private List<FormPageResponse> pages;
 
     private FormEndingResponse ending;
+    private TeamResponse team;
+    private WorkspaceResponse workspace;
 
     private Instant createdDate;
     private Instant lastModifiedDate;

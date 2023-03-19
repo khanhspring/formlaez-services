@@ -1,10 +1,10 @@
 package com.formlaez.service.share.impl;
 
-import com.aventrix.jnanoid.jnanoid.NanoIdUtils;
 import com.formlaez.infrastructure.configuration.exception.InvalidParamsException;
 import com.formlaez.infrastructure.model.entity.form.JpaFormSubmissionSnapshot;
 import com.formlaez.infrastructure.repository.JpaFormSubmissionRepository;
 import com.formlaez.infrastructure.repository.JpaFormSubmissionSnapshotRepository;
+import com.formlaez.infrastructure.util.RandomUtils;
 import com.formlaez.service.share.FormSubmissionSnapshotService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ public class FormSubmissionSnapshotServiceImpl implements FormSubmissionSnapshot
         var submissionSnapshot = JpaFormSubmissionSnapshot.builder()
                 .submission(submission)
                 .data(submission.getData())
-                .code(NanoIdUtils.randomNanoId())
+                .code(RandomUtils.randomNanoId())
                 .form(submission.getForm())
                 .build();
 
