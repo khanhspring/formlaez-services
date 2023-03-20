@@ -7,4 +7,5 @@ import lombok.Setter;
 @Setter
 public class SearchWorkspaceMemberRequest {
     private Long workspaceId;
+    private String keyword;
 }

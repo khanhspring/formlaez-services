@@ -15,6 +15,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(value = "/admin/teams")
@@ -53,11 +55,30 @@ public class TeamAdminController {
         return ResponseId.of(teamMemberAdminService.add(request));
     }
 
+    @DeleteMapping("{teamId}/members/{userId}")
+    public void addMember(@PathVariable Long teamId,
+                          @PathVariable UUID userId) {
+        var request = RemoveTeamMemberRequest.builder()
+                .teamId(teamId)
+                .userId(userId)
+                .build();
+        teamMemberAdminService.remove(request);
+    }
+
     @GetMapping("{teamId}/members")
     public Page<TeamMemberResponse> search(@PathVariable Long teamId,
                                            SearchTeamMemberRequest request,
                                            @PageableDefault(size = 20, sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable) {
         request.setTeamId(teamId);
         return teamMemberAdminService.search(request, pageable);
+    }
+
+    @PutMapping("{teamId}/members/{userId}")
+    public void updateRole(@PathVariable Long teamId,
+                                       @PathVariable UUID userId,
+                                       @RequestBody @Valid UpdateTeamMemberRoleRequest request) {
+        request.setTeamId(teamId);
+        request.setUserId(userId);
+        teamMemberAdminService.updateRole(request);
     }
 }

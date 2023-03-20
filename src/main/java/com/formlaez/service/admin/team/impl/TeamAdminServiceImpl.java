@@ -4,6 +4,7 @@ import com.formlaez.application.model.request.CreateTeamRequest;
 import com.formlaez.application.model.request.SearchTeamRequest;
 import com.formlaez.application.model.request.UpdateTeamRequest;
 import com.formlaez.application.model.response.TeamResponse;
+import com.formlaez.infrastructure.configuration.exception.ForbiddenException;
 import com.formlaez.infrastructure.configuration.exception.InvalidParamsException;
 import com.formlaez.infrastructure.configuration.exception.ResourceNotFoundException;
 import com.formlaez.infrastructure.configuration.exception.UnauthorizedException;
@@ -38,14 +39,12 @@ public class TeamAdminServiceImpl implements TeamAdminService {
     @Transactional(readOnly = true)
     public Page<TeamResponse> search(SearchTeamRequest request, Pageable pageable) {
         var currentUserId = AuthUtils.currentUserIdOrElseThrow();
-        var member = jpaWorkspaceMemberRepository.findByUserIdAndWorkspaceId(currentUserId, request.getWorkspaceId())
-                .orElseThrow();
-
-        if (member.getRole() == WorkspaceMemberRole.Member) {
-            // If the user is not an owner or admin => only can see only joined teams
-            request.setMemberId(currentUserId);
+        var isTeamMember = jpaWorkspaceMemberRepository.existsByUserIdAndWorkspaceId(currentUserId, request.getWorkspaceId());
+        if (!isTeamMember) {
+            throw new ForbiddenException();
         }
 
+        request.setMemberId(currentUserId);
         return jpaTeamRepository.search(request, pageable)
                 .map(teamResponseConverter::convert);
     }

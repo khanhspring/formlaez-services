@@ -95,10 +95,8 @@ public class FormAdminServiceImpl implements FormAdminService {
 
             Assert.isTrue(workspace.getId().equals(team.getWorkspace().getId()), "Team id is not belong to workspace id");
 
-            var workspaceMember = jpaWorkspaceMemberRepository.findByUserIdAndWorkspaceId(currentUserId, request.getWorkspaceId())
-                    .orElseThrow();
             var isTeamMember = jpaTeamMemberRepository.existsByUserIdAndTeamId(currentUserId, team.getId());
-            if (!isTeamMember && workspaceMember.getRole() != WorkspaceMemberRole.Owner) {
+            if (!isTeamMember) {
                 log.error("User is not a member of the team, user id [{}], team id [{}]", currentUserId, team.getId());
                 throw new ForbiddenException();
             }

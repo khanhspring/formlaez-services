@@ -13,5 +13,6 @@ public class UserSessionResponse {
 
     private boolean onboarded;
     private MemberWorkspaceResponse lastAccessedWorkspace;
+    private MemberWorkspaceResponse createdWorkspace;
     private List<MemberWorkspaceResponse> joinedWorkspaces;
 }

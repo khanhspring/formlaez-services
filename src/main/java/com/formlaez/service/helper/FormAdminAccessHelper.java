@@ -33,9 +33,7 @@ public class FormAdminAccessHelper {
             var team = form.getTeam();
             var currentUserId = AuthUtils.currentUserIdOrElseThrow();
             var isTeamMember = jpaTeamMemberRepository.existsByUserIdAndTeamId(currentUserId, team.getId());
-            var workspaceMember = jpaWorkspaceMemberRepository.findByUserIdAndWorkspaceId(currentUserId, team.getWorkspace().getId())
-                    .orElseThrow();
-            if (!isTeamMember && workspaceMember.getRole() != WorkspaceMemberRole.Owner) {
+            if (!isTeamMember) {
                 throw new ForbiddenException();
             }
         }

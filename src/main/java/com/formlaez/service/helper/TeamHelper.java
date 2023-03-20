@@ -22,8 +22,7 @@ public class TeamHelper {
         var currentUserMember = jpaTeamMemberRepository.findByUserIdAndTeamId(currentUserId, teamId)
                 .orElseThrow(ForbiddenException::new);
 
-        List<TeamMemberRole> hasPermissionRoles = List.of(Owner);
-        if (!hasPermissionRoles.contains(currentUserMember.getRole())) {
+        if (currentUserMember.getRole() != Owner) {
             throw new ForbiddenException();
         }
     }

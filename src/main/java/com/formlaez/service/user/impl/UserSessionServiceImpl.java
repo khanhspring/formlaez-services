@@ -10,6 +10,7 @@ import com.formlaez.service.user.UserSessionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -27,7 +28,7 @@ public class UserSessionServiceImpl implements UserSessionService {
     @Override
     public UserSessionResponse getCurrentUserSession() {
         UUID currentUserId = AuthUtils.currentUserIdOrElseThrow();
-        var jpaWorkspaces = jpaWorkspaceMemberRepository.findAllByUserId(currentUserId, Sort.by("createdDate"));
+        var jpaWorkspaces = jpaWorkspaceMemberRepository.findAllByUserId(currentUserId,  Sort.by("createdDate"));
         var joinedWorkspaces = jpaWorkspaces.stream()
                 .map(this::toResponse)
                 .collect(Collectors.toList());
@@ -38,10 +39,19 @@ public class UserSessionServiceImpl implements UserSessionService {
                 .findFirst()
                 .orElse(null);
 
+        var createdWorkspaceMembers = jpaWorkspaceMemberRepository.findAllByCreatedUserId(currentUserId);
+
+        MemberWorkspaceResponse createdWorkspace = null;
+        if (!ObjectUtils.isEmpty(createdWorkspaceMembers)) {
+            var createdWorkspaceMember = createdWorkspaceMembers.get(0);
+            createdWorkspace = toResponse(createdWorkspaceMember);
+        }
+
         return UserSessionResponse.builder()
                 .joinedWorkspaces(joinedWorkspaces)
-                .onboarded(Objects.nonNull(userWorkspace)) // TODO: get from DB
                 .lastAccessedWorkspace(userWorkspace)
+                .createdWorkspace(createdWorkspace)
+                .onboarded(Objects.nonNull(createdWorkspace))
                 .build();
     }
 

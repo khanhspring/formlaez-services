@@ -10,20 +10,25 @@ import com.formlaez.infrastructure.configuration.exception.InvalidParamsExceptio
 import com.formlaez.infrastructure.configuration.exception.ResourceNotFoundException;
 import com.formlaez.infrastructure.converter.TeamMemberResponseConverter;
 import com.formlaez.infrastructure.enumeration.TeamMemberRole;
+import com.formlaez.infrastructure.enumeration.WorkspaceMemberRole;
 import com.formlaez.infrastructure.model.entity.team.JpaTeamMember;
 import com.formlaez.infrastructure.repository.JpaTeamMemberRepository;
 import com.formlaez.infrastructure.repository.JpaTeamRepository;
 import com.formlaez.infrastructure.repository.JpaUserRepository;
+import com.formlaez.infrastructure.util.AuthUtils;
 import com.formlaez.service.admin.team.TeamMemberAdminService;
 import com.formlaez.service.helper.TeamHelper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import static com.formlaez.infrastructure.enumeration.TeamMemberRole.Member;
 import static com.formlaez.infrastructure.enumeration.TeamMemberRole.Owner;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TeamMemberAdminServiceImpl implements TeamMemberAdminService {
@@ -36,12 +41,13 @@ public class TeamMemberAdminServiceImpl implements TeamMemberAdminService {
 
     @Override
     public Long add(AddTeamMemberRequest request) {
+        teamHelper.currentUserMustBeOwner(request.getTeamId());
+
         var team = jpaTeamRepository.findById(request.getTeamId())
                 .orElseThrow(InvalidParamsException::new);
         var user = jpaUserRepository.findById(request.getUserId())
                 .orElseThrow(InvalidParamsException::new);
 
-        Assert.isTrue(request.getRole() != TeamMemberRole.Owner, "Can not add a member as team Owner");
         var member = JpaTeamMember.builder()
                 .user(user)
                 .team(team)
@@ -53,28 +59,44 @@ public class TeamMemberAdminServiceImpl implements TeamMemberAdminService {
 
     @Override
     public void remove(RemoveTeamMemberRequest request) {
+        teamHelper.currentUserMustBeOwner(request.getTeamId());
+
         var existing = jpaTeamMemberRepository.findByUserIdAndTeamId(request.getUserId(), request.getTeamId());
         if (existing.isEmpty()) {
             return;
         }
-        var member = existing.get();
-        if (member.getRole() == Owner) {
-            throw new ApplicationException("Can not remove the owner from their team");
-        }
-        teamHelper.currentUserMustBeOwner(request.getTeamId());
 
+        var member = existing.get();
+
+        if (member.getRole() == Owner) {
+            var currentUserId = AuthUtils.currentUserIdOrElseThrow();
+            var hasOtherAdmin = jpaTeamMemberRepository.existsByRoleAndTeamIdAndUserIdNot(TeamMemberRole.Owner, request.getTeamId(), currentUserId);
+            if (!hasOtherAdmin) {
+                log.error("Can not remove last admin of the team id [{}]", request.getTeamId());
+                throw new InvalidParamsException();
+            }
+        }
         jpaTeamMemberRepository.delete(member);
     }
 
     @Override
     public void updateRole(UpdateTeamMemberRoleRequest request) {
+        teamHelper.currentUserMustBeOwner(request.getTeamId());
+
         var existing = jpaTeamMemberRepository.findByUserIdAndTeamId(request.getUserId(), request.getTeamId())
                 .orElseThrow(ResourceNotFoundException::new);
 
-        teamHelper.currentUserMustBeOwner(request.getTeamId());
+        if (existing.getRole() == Owner && request.getRole() == Member) {
+            var currentUserId = AuthUtils.currentUserIdOrElseThrow();
+            var hasOtherAdmin = jpaTeamMemberRepository.existsByRoleAndTeamIdAndUserIdNot(TeamMemberRole.Owner, request.getTeamId(), currentUserId);
+            if (!hasOtherAdmin) {
+                log.error("Can not remove last admin of the team id [{}]", request.getTeamId());
+                throw new InvalidParamsException();
+            }
+        }
 
         existing.setRole(request.getRole());
-        jpaTeamMemberRepository.delete(existing);
+        jpaTeamMemberRepository.save(existing);
     }
 
     @Override

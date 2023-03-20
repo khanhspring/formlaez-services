@@ -5,25 +5,33 @@ import com.formlaez.application.model.request.RemoveWorkspaceMemberRequest;
 import com.formlaez.application.model.request.SearchWorkspaceMemberRequest;
 import com.formlaez.application.model.request.UpdateWorkspaceMemberRoleRequest;
 import com.formlaez.application.model.response.WorkspaceMemberResponse;
-import com.formlaez.infrastructure.configuration.exception.ApplicationException;
 import com.formlaez.infrastructure.configuration.exception.InvalidParamsException;
 import com.formlaez.infrastructure.configuration.exception.ResourceNotFoundException;
 import com.formlaez.infrastructure.converter.UserResponseConverter;
-import com.formlaez.infrastructure.enumeration.WorkspaceMemberRole;
+import com.formlaez.infrastructure.enumeration.TeamMemberRole;
 import com.formlaez.infrastructure.model.entity.JpaWorkspaceMember;
+import com.formlaez.infrastructure.model.entity.team.JpaTeamMember;
+import com.formlaez.infrastructure.repository.JpaTeamMemberRepository;
 import com.formlaez.infrastructure.repository.JpaUserRepository;
 import com.formlaez.infrastructure.repository.JpaWorkspaceMemberRepository;
 import com.formlaez.infrastructure.repository.JpaWorkspaceRepository;
+import com.formlaez.infrastructure.util.AuthUtils;
 import com.formlaez.service.helper.WorkspaceHelper;
 import com.formlaez.service.admin.workspace.WorkspaceMemberAdminService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
+import java.util.stream.Collectors;
+
+import static com.formlaez.infrastructure.enumeration.WorkspaceMemberRole.Member;
 import static com.formlaez.infrastructure.enumeration.WorkspaceMemberRole.Owner;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class WorkspaceMemberAdminServiceImpl implements WorkspaceMemberAdminService {
@@ -31,17 +39,20 @@ public class WorkspaceMemberAdminServiceImpl implements WorkspaceMemberAdminServ
     private final JpaWorkspaceMemberRepository jpaWorkspaceMemberRepository;
     private final JpaWorkspaceRepository jpaWorkspaceRepository;
     private final JpaUserRepository jpaUserRepository;
+    private final JpaTeamMemberRepository jpaTeamMemberRepository;
     private final UserResponseConverter userResponseConverter;
     private final WorkspaceHelper workspaceHelper;
 
     @Override
+    @Transactional
     public Long add(AddWorkspaceMemberRequest request) {
+        workspaceHelper.currentUserMustBeOwner(request.getWorkspaceId());
+
         var workspace = jpaWorkspaceRepository.findById(request.getWorkspaceId())
                 .orElseThrow(InvalidParamsException::new);
         var user = jpaUserRepository.findById(request.getUserId())
                 .orElseThrow(InvalidParamsException::new);
 
-        Assert.isTrue(request.getRole() != Owner, "Can not add a member as workspace Owner");
         var member = JpaWorkspaceMember.builder()
                 .user(user)
                 .workspace(workspace)
@@ -52,34 +63,53 @@ public class WorkspaceMemberAdminServiceImpl implements WorkspaceMemberAdminServ
     }
 
     @Override
+    @Transactional
     public void remove(RemoveWorkspaceMemberRequest request) {
+        workspaceHelper.currentUserMustBeOwner(request.getWorkspaceId());
+
         var existing = jpaWorkspaceMemberRepository.findByUserIdAndWorkspaceId(request.getUserId(), request.getWorkspaceId());
         if (existing.isEmpty()) {
             return;
         }
         var member = existing.get();
-        if (member.getRole() == Owner) {
-            throw new ApplicationException("Can not remove the owner from their workspace");
-        }
-        workspaceHelper.currentUserMustBeOwnerOrAdmin(request.getWorkspaceId());
 
+        if (member.getRole() == Owner) {
+            var currentUserId = AuthUtils.currentUserIdOrElseThrow();
+            var hasOtherAdmin = jpaWorkspaceMemberRepository.existsByRoleAndWorkspaceIdAndUserIdNot(Owner, request.getWorkspaceId(), currentUserId);
+            if (!hasOtherAdmin) {
+                log.error("Can not remove last admin of the workflow id [{}]", request.getWorkspaceId());
+                throw new InvalidParamsException();
+            }
+        }
+        jpaTeamMemberRepository.deleteAllByUserIdAndTeamWorkspaceId(request.getUserId(), request.getWorkspaceId());
         jpaWorkspaceMemberRepository.delete(member);
     }
 
     @Override
+    @Transactional
     public void updateRole(UpdateWorkspaceMemberRoleRequest request) {
+        workspaceHelper.currentUserMustBeOwner(request.getWorkspaceId());
+
         var existing = jpaWorkspaceMemberRepository.findByUserIdAndWorkspaceId(request.getUserId(), request.getWorkspaceId())
                 .orElseThrow(ResourceNotFoundException::new);
 
-        workspaceHelper.currentUserMustBeOwnerOrAdmin(request.getWorkspaceId());
+        if (existing.getRole() == Owner && request.getRole() == Member) {
+            var currentUserId = AuthUtils.currentUserIdOrElseThrow();
+            var hasOtherAdmin = jpaWorkspaceMemberRepository.existsByRoleAndWorkspaceIdAndUserIdNot(Owner, request.getWorkspaceId(), currentUserId);
+            if (!hasOtherAdmin) {
+                log.error("Can not update last admin to role of member of the workflow id [{}]", request.getWorkspaceId());
+                throw new InvalidParamsException();
+            }
+        }
 
         existing.setRole(request.getRole());
-        jpaWorkspaceMemberRepository.delete(existing);
+        jpaWorkspaceMemberRepository.save(existing);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<WorkspaceMemberResponse> search(SearchWorkspaceMemberRequest request, Pageable pageable) {
-        var memberPage = jpaWorkspaceMemberRepository.findByWorkspaceId(request.getWorkspaceId(), pageable);
+        var memberPage = jpaWorkspaceMemberRepository.search(request, pageable);
         return memberPage.map(this::toResponse);
     }
 

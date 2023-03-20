@@ -13,7 +13,7 @@ public class WorkspaceHelper {
 
     private final JpaWorkspaceMemberRepository jpaWorkspaceMemberRepository;
 
-    public void currentUserMustBeOwnerOrAdmin(Long workspaceId) {
+    public void currentUserMustBeOwner(Long workspaceId) {
         var currentUserId = AuthUtils.currentUserIdOrElseThrow();
         var currentUserMember = jpaWorkspaceMemberRepository.findByUserIdAndWorkspaceId(currentUserId, workspaceId)
                 .orElseThrow(ForbiddenException::new);

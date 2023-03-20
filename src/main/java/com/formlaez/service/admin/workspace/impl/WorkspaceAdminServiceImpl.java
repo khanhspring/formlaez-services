@@ -22,6 +22,9 @@ import com.formlaez.service.helper.WorkspaceHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
+
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -35,8 +38,8 @@ public class WorkspaceAdminServiceImpl implements WorkspaceAdminService {
     @Transactional
     public Long create(CreateWorkspaceRequest request) {
         var currentUserId = AuthUtils.currentUserIdOrElseThrow();
-        var existing = jpaWorkspaceMemberRepository.existsByUserIdAndRole(currentUserId, WorkspaceMemberRole.Owner);
-        if (existing) {
+        var existing = jpaWorkspaceMemberRepository.findAllByCreatedUserId(currentUserId);
+        if (!ObjectUtils.isEmpty(existing)) {
             throw new DuplicatedException();
         }
 
@@ -66,7 +69,7 @@ public class WorkspaceAdminServiceImpl implements WorkspaceAdminService {
         var existing = jpaWorkspaceRepository.findById(request.getId())
                 .orElseThrow(ResourceNotFoundException::new);
 
-        workspaceHelper.currentUserMustBeOwnerOrAdmin(request.getId());
+        workspaceHelper.currentUserMustBeOwner(request.getId());
 
         existing.setName(request.getName());
         existing.setDescription(request.getDescription());
@@ -91,7 +94,7 @@ public class WorkspaceAdminServiceImpl implements WorkspaceAdminService {
         var existing = jpaWorkspaceRepository.findById(request.getId())
                 .orElseThrow(ResourceNotFoundException::new);
 
-        workspaceHelper.currentUserMustBeOwnerOrAdmin(request.getId());
+        workspaceHelper.currentUserMustBeOwner(request.getId());
 
         if (request.getType().getLevel() >= existing.getType().getLevel()) {
             throw new ApplicationException("Workspace type to downgrade is invalid");
