@@ -34,6 +34,11 @@ formlaez:
         accessKey: AKIASWNAGJRE4MK63Q7B
         secretKey: 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
 
+  paddle:
+    publicKey: classpath:certs/paddle.pub
+    plusPlanId: 47512
+    businessPlanId: 47513
+
 logging:
   level:
     root: info

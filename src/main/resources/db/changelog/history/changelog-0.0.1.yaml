@@ -78,3 +78,11 @@ databaseChangeLog:
         - sqlFile:
             splitStatements: true
             path: db/changelog/scripts/0.0.1__010__create_table_form_ending.sql
+
+  - changeSet:
+      id: 0.0.1__011__create_table_subscription
+      author: khanhspring
+      changes:
+        - sqlFile:
+            splitStatements: true
+            path: db/changelog/scripts/0.0.1__011__create_table_subscription.sql
