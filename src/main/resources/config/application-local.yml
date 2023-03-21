@@ -38,6 +38,42 @@ formlaez:
     publicKey: classpath:certs/paddle.pub
     plusPlanId: 47512
     businessPlanId: 47513
+    vendorId: 11046
+    vendorAuthCode: 61b8f9c561097c0948e22533458f63576afc35bfe633c9adfc
+    apiBaseUrl: https://sandbox-vendors.paddle.com/api/2.0
+
+  billing-plan:
+    plans:
+      - code: Free
+        productId: -1
+        price: 0
+        formLimit: 5
+        documentMergePerMonth: 25
+        submissionPerMonth: 100
+        fileStorageLimit: 100000000
+        workspaceMember: 1
+
+      - code: Plus
+        productId: 47512
+        price: 25
+        formLimit: 20
+        documentMergePerMonth: 100
+        submissionPerMonth: 500
+        fileStorageLimit: 1000000000
+        workspaceMember: 2
+
+      - code: Business
+        productId: 47513
+        price: 40
+        formLimit: 100
+        documentMergePerMonth: 500
+        submissionPerMonth: 2000
+        fileStorageLimit: 5000000000
+        workspaceMember: 5
+
+  scheduler:
+    subscription-expired:
+      cron: 0 0 8,14 * * *
 
 logging:
   level:

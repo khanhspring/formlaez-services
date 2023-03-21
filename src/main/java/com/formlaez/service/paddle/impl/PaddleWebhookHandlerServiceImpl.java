@@ -3,6 +3,7 @@ package com.formlaez.service.paddle.impl;
 import com.formlaez.infrastructure.configuration.exception.InvalidParamsException;
 import com.formlaez.infrastructure.enumeration.PaddleAlertName;
 import com.formlaez.infrastructure.property.PaddleProperties;
+import com.formlaez.service.paddle.PaddleSubscriptionCancelledHandlerService;
 import com.formlaez.service.paddle.PaddleSubscriptionCreatedHandlerService;
 import com.formlaez.service.paddle.PaddleWebhookHandlerService;
 import com.jamiussiam.paddle.verifier.Verifier;
@@ -21,14 +22,17 @@ public class PaddleWebhookHandlerServiceImpl implements PaddleWebhookHandlerServ
 
     private final Verifier verifier;
     private final PaddleSubscriptionCreatedHandlerService subscriptionCreatedHandler;
+    private final PaddleSubscriptionCancelledHandlerService subscriptionCanceledHandler;
 
     public PaddleWebhookHandlerServiceImpl(PaddleProperties properties,
-                                           PaddleSubscriptionCreatedHandlerService subscriptionCreatedHandler) throws IOException {
+                                           PaddleSubscriptionCreatedHandlerService subscriptionCreatedHandler,
+                                           PaddleSubscriptionCancelledHandlerService subscriptionCanceledHandler) throws IOException {
         var publicKey = properties.getPublicKey().getContentAsString(StandardCharsets.UTF_8)
                 .replace("\r", ""); // the lib just support only \n as line break
         verifier = new Verifier(publicKey);
 
         this.subscriptionCreatedHandler = subscriptionCreatedHandler;
+        this.subscriptionCanceledHandler = subscriptionCanceledHandler;
     }
 
     @Async
@@ -42,8 +46,15 @@ public class PaddleWebhookHandlerServiceImpl implements PaddleWebhookHandlerServ
         }
         var dataMap = getSortedMapFromBody(requestBody);
         var alertName = PaddleAlertName.of(dataMap.get("alert_name"));
+
         if (alertName == PaddleAlertName.subscription_created) {
             subscriptionCreatedHandler.handle(dataMap);
+            return;
+        }
+
+        if (alertName == PaddleAlertName.subscription_cancelled) {
+            subscriptionCanceledHandler.handle(dataMap);
+            return;
         }
     }
 

@@ -18,6 +18,7 @@ import com.formlaez.infrastructure.repository.JpaWorkspaceRepository;
 import com.formlaez.infrastructure.util.AuthUtils;
 import com.formlaez.service.helper.WorkspaceHelper;
 import com.formlaez.service.admin.workspace.WorkspaceMemberAdminService;
+import com.formlaez.service.usage.WorkspaceUsageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -42,10 +43,12 @@ public class WorkspaceMemberAdminServiceImpl implements WorkspaceMemberAdminServ
     private final JpaTeamMemberRepository jpaTeamMemberRepository;
     private final UserResponseConverter userResponseConverter;
     private final WorkspaceHelper workspaceHelper;
+    private final WorkspaceUsageService workspaceUsageService;
 
     @Override
     @Transactional
     public Long add(AddWorkspaceMemberRequest request) {
+        workspaceUsageService.checkMemberLimitAndIncreaseOrElseThrow(request.getWorkspaceId());
         workspaceHelper.currentUserMustBeOwner(request.getWorkspaceId());
 
         var workspace = jpaWorkspaceRepository.findById(request.getWorkspaceId())
@@ -81,6 +84,7 @@ public class WorkspaceMemberAdminServiceImpl implements WorkspaceMemberAdminServ
                 throw new InvalidParamsException();
             }
         }
+        workspaceUsageService.decreaseMember(request.getWorkspaceId());
         jpaTeamMemberRepository.deleteAllByUserIdAndTeamWorkspaceId(request.getUserId(), request.getWorkspaceId());
         jpaWorkspaceMemberRepository.delete(member);
     }

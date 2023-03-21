@@ -13,6 +13,7 @@ import com.formlaez.infrastructure.util.RandomUtils;
 import com.formlaez.service.helper.FormSubmissionDocumentMergeHelper;
 import com.formlaez.service.share.FormSubmissionSnapshotService;
 import com.formlaez.service.submission.FormSubmissionService;
+import com.formlaez.service.usage.WorkspaceUsageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,7 @@ public class FormSubmissionServiceImpl implements FormSubmissionService {
     private final JpaFormRepository jpaFormRepository;
     private final FormSubmissionSnapshotService formSubmissionSnapshotService;
     private final FormSubmissionDocumentMergeHelper formSubmissionDocumentMergeHelper;
+    private final WorkspaceUsageService workspaceUsageService;
 
     @Override
     @Transactional
@@ -32,6 +34,7 @@ public class FormSubmissionServiceImpl implements FormSubmissionService {
         var form = jpaFormRepository.findByCode(request.getFormCode())
                 .orElseThrow(InvalidParamsException::new);
 
+        workspaceUsageService.checkSubmissionLimitAndIncreaseOrElseThrow(form.getWorkspace().getId());
         var submission = JpaFormSubmission.builder()
                 .code(RandomUtils.randomNanoId())
                 .form(form)
@@ -54,6 +57,7 @@ public class FormSubmissionServiceImpl implements FormSubmissionService {
             throw new ForbiddenException();
         }
 
+        workspaceUsageService.checkSubmissionLimitAndIncreaseOrElseThrow(form.getWorkspace().getId());
         return formSubmissionDocumentMergeHelper.mergeDocument(submission, request.getTemplateId());
     }
 }

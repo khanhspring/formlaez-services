@@ -39,4 +39,9 @@ public class FormDocumentTemplateAdminController {
         request.setId(id);
         formDocumentTemplateAdminService.update(request);
     }
+
+    @DeleteMapping("{id}")
+    public void remove(@PathVariable Long id) {
+        formDocumentTemplateAdminService.remove(id);
+    }
 }

@@ -23,6 +23,7 @@ import com.formlaez.infrastructure.util.AuthUtils;
 import com.formlaez.infrastructure.util.RandomUtils;
 import com.formlaez.service.admin.form.FormAdminService;
 import com.formlaez.service.helper.FormAdminAccessHelper;
+import com.formlaez.service.usage.WorkspaceUsageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -47,6 +48,7 @@ public class FormAdminServiceImpl implements FormAdminService {
     private final FormResponseConverter formResponseConverter;
     private final BasicFormResponseConverter basicFormResponseConverter;
     private final FormAdminAccessHelper formAdminAccessHelper;
+    private final WorkspaceUsageService workspaceUsageService;
 
     @Override
     @Transactional(readOnly = true)
@@ -82,6 +84,7 @@ public class FormAdminServiceImpl implements FormAdminService {
     @Override
     @Transactional
     public String create(CreateFormRequest request) {
+        workspaceUsageService.checkFormLimitAndIncreaseOrElseThrow(request.getWorkspaceId());
         var workspace = jpaWorkspaceRepository.findById(request.getWorkspaceId())
                 .orElseThrow(InvalidParamsException::new);
 
@@ -199,6 +202,8 @@ public class FormAdminServiceImpl implements FormAdminService {
     public void delete(Long id) {
         var form = jpaFormRepository.findByIdAndStatusNot(id, Deleted)
                 .orElseThrow(ResourceNotFoundException::new);
+
+        workspaceUsageService.decreaseForm(form.getWorkspace().getId());
         form.setStatus(Deleted);
         jpaFormRepository.save(form);
     }

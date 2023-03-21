@@ -16,7 +16,8 @@ public enum CommonError implements Error {
     MissingParams("996", "Missing parameters"),
     ResourceNotfound("995", "Resource not found"),
     Duplicated("994", "Duplicated"),
-    InvalidParams("993", "Invalid parameters");
+    InvalidParams("993", "Invalid parameters"),
+    UsageLimitExceeded("992", "Usage limit exceeded");
 
     private final String code;
     private final String message;

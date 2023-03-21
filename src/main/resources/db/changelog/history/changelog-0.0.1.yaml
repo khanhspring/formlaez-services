@@ -86,3 +86,11 @@ databaseChangeLog:
         - sqlFile:
             splitStatements: true
             path: db/changelog/scripts/0.0.1__011__create_table_subscription.sql
+
+  - changeSet:
+      id: 0.0.1__012__create_table_worksapce_usage
+      author: khanhspring
+      changes:
+        - sqlFile:
+            splitStatements: true
+            path: db/changelog/scripts/0.0.1__012__create_table_worksapce_usage.sql

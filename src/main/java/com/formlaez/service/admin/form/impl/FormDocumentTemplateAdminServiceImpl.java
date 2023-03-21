@@ -18,8 +18,10 @@ import com.formlaez.infrastructure.util.AttachmentUtils;
 import com.formlaez.infrastructure.util.RandomUtils;
 import com.formlaez.service.admin.form.FormDocumentTemplateAdminService;
 import com.formlaez.service.storage.CloudStorageService;
+import com.formlaez.service.usage.WorkspaceUsageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -43,6 +45,7 @@ public class FormDocumentTemplateAdminServiceImpl implements FormDocumentTemplat
     private final JpaFormRepository jpaFormRepository;
     private final CloudStorageService cloudStorageService;
     private final FormDocumentTemplateResponseConverter formDocumentTemplateResponseConverter;
+    private final WorkspaceUsageService workspaceUsageService;
 
     @Override
     @Transactional(readOnly = true)
@@ -58,6 +61,8 @@ public class FormDocumentTemplateAdminServiceImpl implements FormDocumentTemplat
                 .orElseThrow(InvalidParamsException::new);
 
         var file = request.getFile();
+        workspaceUsageService.checkFileStorageLimitAndIncreaseOrElseThrow(form.getWorkspace().getId(), file.getSize());
+
         var originalName = file.getOriginalFilename();
         var extension = FilenameUtils.getExtension(originalName);
 
@@ -114,5 +119,15 @@ public class FormDocumentTemplateAdminServiceImpl implements FormDocumentTemplat
         documentTemplate.setDescription(request.getDescription());
         documentTemplate.setTitle(request.getTitle());
         jpaFormDocumentTemplateRepository.save(documentTemplate);
+    }
+
+    @Override
+    @Transactional
+    public void remove(Long id) {
+        var documentTemplate = jpaFormDocumentTemplateRepository.findById(id)
+                .orElseThrow(ResourceNotFoundException::new);
+        var attachment = documentTemplate.getAttachment();
+        workspaceUsageService.decreaseFileStorage(documentTemplate.getForm().getWorkspace().getId(), attachment.getSize());
+        jpaFormDocumentTemplateRepository.delete(documentTemplate);
     }
 }

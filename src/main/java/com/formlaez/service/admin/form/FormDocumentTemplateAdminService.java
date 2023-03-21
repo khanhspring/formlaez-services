@@ -14,4 +14,5 @@ public interface FormDocumentTemplateAdminService {
     Long create(CreateFormDocumentTemplateRequest request);
 
     void update(UpdateFormDocumentTemplateRequest request);
+    void remove(Long id);
 }

@@ -41,7 +41,7 @@ public class AuthClientImpl implements AuthClient {
             formData.add("redirect_uri", properties.getRedirectUri());
             formData.add("code", code);
             ResponseEntity<AuthToken> response = webClient.post()
-                    .uri("oauth2/token")
+                    .uri("/oauth2/token")
                     .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                     .body(BodyInserters.fromFormData(formData))
                     .retrieve()

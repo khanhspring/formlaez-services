@@ -55,6 +55,16 @@ public class GlobalExceptionHandler {
                 .build();
     }
 
+    @ExceptionHandler(value = {UsageLimitExceededException.class})
+    @ResponseStatus(value = HttpStatus.PAYMENT_REQUIRED)
+    public ErrorResponse handle(UsageLimitExceededException e) {
+        log.error("", e);
+        return ErrorResponse.builder()
+                .code(e.getCode())
+                .message(e.getMessage())
+                .build();
+    }
+
     @ExceptionHandler(value = {ApplicationException.class})
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ErrorResponse handle(ApplicationException e) {

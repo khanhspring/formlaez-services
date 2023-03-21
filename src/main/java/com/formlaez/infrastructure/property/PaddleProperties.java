@@ -28,12 +28,29 @@ public class PaddleProperties {
     @NotBlank
     private String businessPlanId;
 
+    @NotNull
+    private Long vendorId;
+    @NotBlank
+    private String vendorAuthCode;
+    @NotBlank
+    private String apiBaseUrl;
+
     public WorkspaceType getWorkspaceType(String id) {
         if (plusPlanId.equals(id)) {
             return WorkspaceType.Plus;
         }
         if (businessPlanId.equals(id)) {
             return WorkspaceType.Business;
+        }
+        throw new InvalidParamsException("Workspace type is not supported");
+    }
+
+    public String getPlanId(WorkspaceType type) {
+        if (type == WorkspaceType.Plus) {
+            return plusPlanId;
+        }
+        if (type == WorkspaceType.Business) {
+            return businessPlanId;
         }
         throw new InvalidParamsException("Workspace type is not supported");
     }
