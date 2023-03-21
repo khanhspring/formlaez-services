@@ -9,15 +9,20 @@ import com.formlaez.infrastructure.docengine.variable.Variable;
 import lombok.extern.log4j.Log4j2;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.xwpf.usermodel.*;
+import org.springframework.util.ObjectUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Base64;
 import java.util.List;
+import java.util.Objects;
 
 @Log4j2
 public class Processor {
+
+    private static final String BLANK_IMAGE = "R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
+
     public void execute(XWPFDocument document, Variable vars) {
         processParagraphs(document.getParagraphs(), vars);
         processTables(document.getTables(), vars);
@@ -81,9 +86,10 @@ public class Processor {
         }
 
         String value = pathExecutor.execute(expression.getContent().trim(), vars);
-        if (value == null) {
-            return;
+        if (ObjectUtils.isEmpty(value)) {
+            value = BLANK_IMAGE;
         }
+        value = value.replace("data:image/png;base64,", "");
         byte[] imgBytes = Base64.getDecoder().decode(value);
         try(InputStream inputStream = new ByteArrayInputStream(imgBytes);) {
             XWPFDocument document = run.getParent().getDocument();

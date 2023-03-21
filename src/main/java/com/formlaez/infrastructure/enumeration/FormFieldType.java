@@ -24,7 +24,8 @@ public enum FormFieldType {
     Switch(true),
     Dropdown(true),
     PictureChoice(true),
-    MultipleChoice(true);
+    MultipleChoice(true),
+    Signature(true);
     
     private final boolean formControl;
 }

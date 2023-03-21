@@ -38,7 +38,7 @@ formlaez:
     businessPlanId: 47513
     vendorId: 11046
     vendorAuthCode: 61b8f9c561097c0948e22533458f63576afc35bfe633c9adfc
-    apiBaseUrl: https://vendors.paddle.com/api/2.0
+    apiBaseUrl: https://sandbox-vendors.paddle.com/api/2.0
 
   billing-plan:
     plans:
@@ -68,3 +68,7 @@ formlaez:
         submissionPerMonth: 2000
         fileStorageLimit: 5000000000
         workspaceMember: 5
+
+  scheduler:
+    subscription-expired:
+      cron: 0 0 8,14 * * *

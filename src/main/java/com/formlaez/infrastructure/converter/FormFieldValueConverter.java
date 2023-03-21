@@ -4,16 +4,20 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.formlaez.infrastructure.model.entity.form.JpaFormField;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class FormFieldValueConverter {
@@ -42,7 +46,8 @@ public class FormFieldValueConverter {
         return switch (field.getType()) {
             case Dropdown -> getDropdownValue(field, rawValue);
             case MultipleChoice -> getMultiChoiceValue(field, rawValue);
-            default -> rawValue.asText();
+            case InputNumber -> formatNumber(field, rawValue);
+            default -> asText(field, rawValue);
         };
     }
 
@@ -51,7 +56,11 @@ public class FormFieldValueConverter {
         if (ObjectUtils.isEmpty(options)) {
             return null;
         }
-        var selectedValue = rawValue.asText();
+        var fieldValue = rawValue.get(field.getCode());
+        if (Objects.isNull(fieldValue) || fieldValue.isNull()) {
+            return null;
+        }
+        var selectedValue = fieldValue.asText();
         for (var option : options) {
             if (option.getCode().equals(selectedValue)) {
                 return option.getLabel();
@@ -65,7 +74,8 @@ public class FormFieldValueConverter {
         if (ObjectUtils.isEmpty(options)) {
             return null;
         }
-        if (!(rawValue instanceof ArrayNode arrayValues)) {
+        var fieldValues = rawValue.get(field.getCode());
+        if (!(fieldValues instanceof ArrayNode arrayValues)) {
             return null;
         }
 
@@ -80,5 +90,28 @@ public class FormFieldValueConverter {
             }
         }
         return String.join(", ", results);
+    }
+
+    private String formatNumber(JpaFormField field, JsonNode rawValue) {
+        var numberValue = asText(field, rawValue);
+        if (ObjectUtils.isEmpty(numberValue)) {
+            return numberValue;
+        }
+        try {
+            BigDecimal number = new BigDecimal(numberValue);
+            var numberFormat = new DecimalFormat("#,###.################");
+            return numberFormat.format(number);
+        } catch (Exception e) {
+            log.warn("Convert number error", e);
+        }
+        return null;
+    }
+
+    private String asText(JpaFormField field, JsonNode rawValue) {
+        var fieldValue = rawValue.get(field.getCode());
+        if (Objects.isNull(fieldValue) || fieldValue.isNull()) {
+            return null;
+        }
+        return fieldValue.asText();
     }
 }

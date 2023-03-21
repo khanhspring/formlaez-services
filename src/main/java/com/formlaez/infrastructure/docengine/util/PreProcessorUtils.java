@@ -22,7 +22,8 @@ public class PreProcessorUtils {
             Expression simpleExpression = simpleVariableExpression.extractFromText(runText);
             if (simpleExpression != null) {
                 String newContent = "";
-                if ("index".equalsIgnoreCase(simpleExpression.getContent())) {
+                if ("index".equalsIgnoreCase(simpleExpression.getContent())
+                    || "i".equalsIgnoreCase(simpleExpression.getContent())) {
                     newContent = index+"";
                 } else {
                     newContent = expressionBuilder.build(ExpressionType.SIMPLE,

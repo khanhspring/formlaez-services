@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.TextNode;
 import com.formlaez.infrastructure.enumeration.FormSectionType;
 import com.formlaez.infrastructure.model.entity.form.*;
 import lombok.RequiredArgsConstructor;
@@ -102,6 +103,7 @@ public class FormSubmissionDataJsonConverter implements Converter<JpaFormSubmiss
     }
 
     private JsonNode process(JpaFormField field, JsonNode fieldData) {
-        return fieldData.get(field.getCode());
+        String value = formFieldValueConverter.asTextValue(field, fieldData);
+        return TextNode.valueOf(value);
     }
 }
