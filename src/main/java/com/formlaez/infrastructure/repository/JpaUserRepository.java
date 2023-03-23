@@ -17,4 +17,6 @@ public interface JpaUserRepository extends JpaRepository<JpaUser, UUID> {
             " and (:#{#request.keyword == null} = true or o.firstName like %:#{#request.keyword}% or o.lastName like %:#{#request.keyword}%)" +
             " and (:#{#request.email == null} = true or o.email like %:#{#request.email}%)")
     Page<JpaUser> search(@Param("request") SearchUserRequest request, Pageable pageable);
+
+    boolean existsByEmail(String email);
 }

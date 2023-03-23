@@ -94,3 +94,11 @@ databaseChangeLog:
         - sqlFile:
             splitStatements: true
             path: db/changelog/scripts/0.0.1__012__create_table_worksapce_usage.sql
+
+  - changeSet:
+      id: 0.0.1__013__create_table_sign_up_request
+      author: khanhspring
+      changes:
+        - sqlFile:
+            splitStatements: true
+            path: db/changelog/scripts/0.0.1__013__create_table_sign_up_request.sql

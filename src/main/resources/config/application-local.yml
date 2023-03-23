@@ -10,21 +10,28 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:9000
+          issuer-uri: ${formlaez.authUrl}
   jpa:
     show-sql: false
 
 formlaez:
+  domainName: 127.0.0.1
+  authUrl: http://${formlaez.domainName}:9000
+  appUrl: http://${formlaez.domainName}:3000
   client:
     auth:
       baseUrl: http://localhost:9000
       authorization: Basic Zm9ybWxhZXotd2ViOjEyMzQ1NjdhQCM=
-      redirectUri: http://127.0.0.1:3000/login/code
+      redirectUri: ${formlaez.appUrl}/login/code
+
+    authInternal:
+      baseUrl: http://localhost:9000/internal
+      authorization: Basic Zm9ybWxhZXotc2VydmljZXM6ZjBybUxAZXo=
 
   basic-auth:
     users:
       - username: formlaez-auth
-        password: "{bcrypt}$2a$10$ZkVufhbhMwdbAg74OIB0FuhjDUMsZWB3ses4NydeqBh8KYdLluVMa"
+        password: "$2a$10$ZkVufhbhMwdbAg74OIB0FuhjDUMsZWB3ses4NydeqBh8KYdLluVMa"
         roles: "Admin"
 
   aws:
@@ -41,6 +48,9 @@ formlaez:
     vendorId: 11046
     vendorAuthCode: 61b8f9c561097c0948e22533458f63576afc35bfe633c9adfc
     apiBaseUrl: https://sandbox-vendors.paddle.com/api/2.0
+
+  sendGrid:
+    secretKey: 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
 
   billing-plan:
     plans:

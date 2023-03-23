@@ -2,8 +2,8 @@ package com.formlaez.infrastructure.client.impl;
 
 import com.formlaez.infrastructure.client.AuthClient;
 import com.formlaez.infrastructure.client.model.AuthToken;
-import com.formlaez.infrastructure.property.AuthClientProperties;
 import com.formlaez.infrastructure.configuration.exception.ApplicationException;
+import com.formlaez.infrastructure.property.AuthClientProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
