@@ -4,7 +4,7 @@ import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.formlaez.infrastructure.model.common.attachment.AttachmentMetadata;
-import com.formlaez.infrastructure.property.AwsS3Properties;
+import com.formlaez.infrastructure.property.aws.AwsProperties;
 import com.formlaez.service.storage.CloudStorageService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.time.DateUtils;
@@ -18,7 +18,7 @@ import java.util.Date;
 public class AwsS3CloudStorageServiceImpl implements CloudStorageService {
 
     private final AmazonS3 amazonS3;
-    private final AwsS3Properties properties;
+    private final AwsProperties properties;
 
     @Override
     public void upload(InputStream inputStream, AttachmentMetadata info) {
@@ -26,13 +26,13 @@ public class AwsS3CloudStorageServiceImpl implements CloudStorageService {
         var objectMetadata = new ObjectMetadata();
         objectMetadata.setContentType(info.getContentType());
         objectMetadata.setContentLength(info.getFileSize());
-        amazonS3.putObject(properties.getBucketName(), key, inputStream, objectMetadata);
+        amazonS3.putObject(properties.s3().getBucketName(), key, inputStream, objectMetadata);
     }
 
     @Override
     public InputStream download(String cloudStorageLocation, String fileName) {
         var key = String.format("%s/%s", cloudStorageLocation, fileName);
-        var s3Object = amazonS3.getObject(properties.getBucketName(), key);
+        var s3Object = amazonS3.getObject(properties.s3().getBucketName(), key);
         return s3Object.getObjectContent();
     }
 
@@ -41,7 +41,7 @@ public class AwsS3CloudStorageServiceImpl implements CloudStorageService {
         var key = String.format("%s/%s", cloudStorageLocation, fileName);
         var now = new Date();
         Date expiration = DateUtils.addMilliseconds(now, expiredInMillis);
-        var presignedUrl = amazonS3.generatePresignedUrl(properties.getBucketName(), key, expiration, HttpMethod.GET);
+        var presignedUrl = amazonS3.generatePresignedUrl(properties.s3().getBucketName(), key, expiration, HttpMethod.GET);
         return presignedUrl.toString();
     }
 }

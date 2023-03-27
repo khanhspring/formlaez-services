@@ -29,15 +29,19 @@ formlaez:
   basic-auth:
     users:
       - username: formlaez-auth
-        password: "{bcrypt}$2a$10$ZkVufhbhMwdbAg74OIB0FuhjDUMsZWB3ses4NydeqBh8KYdLluVMa"
+        password: "$2a$10$ZkVufhbhMwdbAg74OIB0FuhjDUMsZWB3ses4NydeqBh8KYdLluVMa"
         roles: "Admin"
 
   aws:
+    credentials:
+      accessKey: AKIASWNAGJRE4MK63Q7B
+      secretKey: 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
     s3:
       bucketName: formlaez-dev
-      credentials:
-        accessKey: AKIASWNAGJRE4MK63Q7B
-        secretKey: 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
+    ses:
+      signUpTemplateId: SignUp
+      welcomeTemplateId: Welcome
+      primaryEmail: hello@formini.so
 
   paddle:
     publicKey: classpath:certs/paddle.pub
@@ -46,9 +50,6 @@ formlaez:
     vendorId: 11046
     vendorAuthCode: 61b8f9c561097c0948e22533458f63576afc35bfe633c9adfc
     apiBaseUrl: https://sandbox-vendors.paddle.com/api/2.0
-
-  sendGrid:
-    secretKey: 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
 
   billing-plan:
     plans:

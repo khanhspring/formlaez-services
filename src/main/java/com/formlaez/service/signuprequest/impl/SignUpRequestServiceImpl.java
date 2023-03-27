@@ -1,6 +1,7 @@
 package com.formlaez.service.signuprequest.impl;
 
 import com.formlaez.application.model.request.ConfirmSignUpRequest;
+import com.formlaez.application.model.request.EmailTemplatedSendingRequest;
 import com.formlaez.application.model.request.SignUpRequest;
 import com.formlaez.infrastructure.client.AuthInternalClient;
 import com.formlaez.infrastructure.client.model.CreateUserRequest;
@@ -11,9 +12,11 @@ import com.formlaez.infrastructure.enumeration.SignUpRequestStatus;
 import com.formlaez.infrastructure.enumeration.UserStatus;
 import com.formlaez.infrastructure.model.entity.JpaSignUpRequest;
 import com.formlaez.infrastructure.model.entity.JpaUser;
+import com.formlaez.infrastructure.property.aws.AwsProperties;
 import com.formlaez.infrastructure.repository.JpaSignUpRequestRepository;
 import com.formlaez.infrastructure.repository.JpaUserRepository;
 import com.formlaez.infrastructure.util.RandomUtils;
+import com.formlaez.service.email.EmailService;
 import com.formlaez.service.signuprequest.SignUpRequestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,6 +26,8 @@ import org.springframework.util.Assert;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +38,8 @@ public class SignUpRequestServiceImpl implements SignUpRequestService {
     private final JpaSignUpRequestRepository jpaSignUpRequestRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthInternalClient authInternalClient;
+    private final EmailService emailService;
+    private final AwsProperties awsProperties;
 
     @Override
     @Transactional
@@ -46,6 +53,14 @@ public class SignUpRequestServiceImpl implements SignUpRequestService {
                 .expireDate(Instant.now().plus(EXPIRE_DAYS, ChronoUnit.DAYS))
                 .build();
         jpaSignUpRequestRepository.save(signUpRequest);
+
+        var emailRequest = EmailTemplatedSendingRequest.builder()
+                .fromAddress(awsProperties.ses().getPrimaryEmail())
+                .templateId(awsProperties.ses().getSignUpTemplateId())
+                .data(Map.of("verification_code", signUpRequest.getVerificationCode()))
+                .toAddresses(List.of(request.getEmail()))
+                .build();
+        emailService.sendTemplatedEmail(emailRequest);
     }
 
     @Override
@@ -90,5 +105,13 @@ public class SignUpRequestServiceImpl implements SignUpRequestService {
                 .status(UserStatus.Active)
                 .build();
         jpaUserRepository.save(user);
+
+        var emailRequest = EmailTemplatedSendingRequest.builder()
+                .fromAddress(awsProperties.ses().getPrimaryEmail())
+                .templateId(awsProperties.ses().getWelcomeTemplateId())
+                .data(Map.of("name", signUpRequest.getFirstName()))
+                .toAddresses(List.of(request.getEmail()))
+                .build();
+        emailService.sendTemplatedEmail(emailRequest);
     }
 }

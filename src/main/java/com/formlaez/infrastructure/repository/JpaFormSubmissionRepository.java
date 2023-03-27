@@ -2,6 +2,7 @@ package com.formlaez.infrastructure.repository;
 
 import com.formlaez.application.model.request.SearchFormSubmissionRequest;
 import com.formlaez.infrastructure.model.entity.form.JpaFormSubmission;
+import com.formlaez.infrastructure.model.projection.JpaFormFieldCountValueProjection;
 import com.formlaez.infrastructure.model.projection.JpaFormSubmissionProjection;
 import com.formlaez.infrastructure.repository.custom.JpaFormSubmissionRepositoryCustom;
 import org.springframework.data.domain.Page;
@@ -30,4 +31,38 @@ public interface JpaFormSubmissionRepository extends JpaRepository<JpaFormSubmis
             " and (:#{#request.toDate == null} = true or o.createdDate <= :#{#request.toDate})" +
             " order by o.createdDate desc")
     Page<JpaFormSubmissionProjection> search(@Param("request") SearchFormSubmissionRequest request, Pageable pageable);
+
+    @Query(value = "select data ->> :fieldCode as value, count(1) as count" +
+            " from form_submission f" +
+            " where form_id = :formId" +
+            " and data ->> :fieldCode is not null" +
+            " group by value",
+            nativeQuery = true)
+    List<JpaFormFieldCountValueProjection> countValues(@Param("formId") Long formId, @Param("fieldCode") String fieldCode);
+
+    @Query(value = "select to_char((data->> :fieldCode)::::timestamp, :dateFormat) as value," +
+            " count(1) as count" +
+            " from form_submission f" +
+            " where form_id = :formId" +
+            " and data ->> :fieldCode is not null" +
+            " group by value",
+            nativeQuery = true)
+    List<JpaFormFieldCountValueProjection> countDateValues(@Param("formId") Long formId, @Param("fieldCode") String fieldCode, @Param("dateFormat") String dateFormat);
+
+    @Query(value = "select value, count(1) as count" +
+            " from form_submission," +
+            " LATERAL JSONB_ARRAY_ELEMENTS_TEXT(form_data.data -> :fieldCode) value" +
+            " where form_id  = :formId" +
+            " group by value",
+            nativeQuery = true)
+    List<JpaFormFieldCountValueProjection> countArrayValues(@Param("formId") Long formId, @Param("fieldCode") String fieldCode);
+
+    @Query(value = "select count(1) as count" +
+            " from form_submission" +
+            " where form_id  = :formId" +
+            " and data ->> :fieldCode is not null",
+            nativeQuery = true)
+    long count(@Param("formId") Long formId, @Param("fieldCode") String fieldCode);
+
+    long countByFormId(Long formId);
 }

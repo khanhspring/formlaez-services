@@ -23,7 +23,6 @@ public enum FormFieldType {
     OpinionScale(true),
     Switch(true),
     Dropdown(true),
-    PictureChoice(true),
     MultipleChoice(true),
     Signature(true);
     
