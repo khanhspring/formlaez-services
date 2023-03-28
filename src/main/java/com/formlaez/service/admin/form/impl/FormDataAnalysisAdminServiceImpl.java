@@ -4,6 +4,7 @@ import com.formlaez.application.model.response.form.analysis.FormDataAnalysisRes
 import com.formlaez.application.model.response.form.analysis.FormFieldAnalysisResponse;
 import com.formlaez.infrastructure.configuration.exception.ResourceNotFoundException;
 import com.formlaez.infrastructure.enumeration.FormSectionType;
+import com.formlaez.infrastructure.enumeration.FormSubmissionStatus;
 import com.formlaez.infrastructure.repository.JpaFormRepository;
 import com.formlaez.infrastructure.repository.JpaFormSubmissionRepository;
 import com.formlaez.service.admin.form.FormDataAnalysisAdminService;
@@ -42,7 +43,7 @@ public class FormDataAnalysisAdminServiceImpl implements FormDataAnalysisAdminSe
             }
         }
 
-        long count = jpaFormSubmissionRepository.countByFormId(form.getId());
+        long count = jpaFormSubmissionRepository.countByFormIdAndStatus(form.getId(), FormSubmissionStatus.Active);
 
         return FormDataAnalysisResponse.builder()
                 .items(items)

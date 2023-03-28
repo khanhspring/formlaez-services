@@ -1,6 +1,7 @@
 package com.formlaez.infrastructure.repository;
 
 import com.formlaez.application.model.request.SearchFormSubmissionRequest;
+import com.formlaez.infrastructure.enumeration.FormSubmissionStatus;
 import com.formlaez.infrastructure.model.entity.form.JpaFormSubmission;
 import com.formlaez.infrastructure.model.projection.JpaFormFieldCountValueProjection;
 import com.formlaez.infrastructure.model.projection.JpaFormSubmissionProjection;
@@ -36,6 +37,7 @@ public interface JpaFormSubmissionRepository extends JpaRepository<JpaFormSubmis
             " from form_submission f" +
             " where form_id = :formId" +
             " and data ->> :fieldCode is not null" +
+            " and status = 'Active'" +
             " group by value",
             nativeQuery = true)
     List<JpaFormFieldCountValueProjection> countValues(@Param("formId") Long formId, @Param("fieldCode") String fieldCode);
@@ -45,14 +47,16 @@ public interface JpaFormSubmissionRepository extends JpaRepository<JpaFormSubmis
             " from form_submission f" +
             " where form_id = :formId" +
             " and data ->> :fieldCode is not null" +
+            " and status = 'Active'" +
             " group by value",
             nativeQuery = true)
     List<JpaFormFieldCountValueProjection> countDateValues(@Param("formId") Long formId, @Param("fieldCode") String fieldCode, @Param("dateFormat") String dateFormat);
 
     @Query(value = "select value, count(1) as count" +
             " from form_submission," +
-            " LATERAL JSONB_ARRAY_ELEMENTS_TEXT(form_data.data -> :fieldCode) value" +
+            " LATERAL JSONB_ARRAY_ELEMENTS_TEXT(form_submission.data -> :fieldCode) value" +
             " where form_id  = :formId" +
+            " and status = 'Active'" +
             " group by value",
             nativeQuery = true)
     List<JpaFormFieldCountValueProjection> countArrayValues(@Param("formId") Long formId, @Param("fieldCode") String fieldCode);
@@ -60,9 +64,10 @@ public interface JpaFormSubmissionRepository extends JpaRepository<JpaFormSubmis
     @Query(value = "select count(1) as count" +
             " from form_submission" +
             " where form_id  = :formId" +
-            " and data ->> :fieldCode is not null",
+            " and data ->> :fieldCode is not null" +
+            " and status = 'Active'",
             nativeQuery = true)
     long count(@Param("formId") Long formId, @Param("fieldCode") String fieldCode);
 
-    long countByFormId(Long formId);
+    long countByFormIdAndStatus(Long formId, FormSubmissionStatus status);
 }

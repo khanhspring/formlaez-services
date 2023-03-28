@@ -60,6 +60,7 @@ public class NumberFieldDataAnalyzer implements FieldDataAnalyzer {
         return NumberFieldAnalysisResponse.builder()
                 .values(values)
                 .count(count)
+                .total(total)
                 .avg(avg)
                 .min(min)
                 .max(max)
