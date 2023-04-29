@@ -2,7 +2,6 @@ package com.formlaez.infrastructure.model.entity.team;
 
 import com.formlaez.infrastructure.model.entity.JpaBaseEntity;
 import com.formlaez.infrastructure.model.entity.JpaWorkspace;
-import com.formlaez.infrastructure.model.entity.form.JpaFormPage;
 import jakarta.persistence.*;
 import lombok.*;
 

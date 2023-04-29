@@ -14,7 +14,6 @@ import com.formlaez.infrastructure.converter.FormResponseConverter;
 import com.formlaez.infrastructure.enumeration.FormScope;
 import com.formlaez.infrastructure.enumeration.FormSharingScope;
 import com.formlaez.infrastructure.enumeration.FormStatus;
-import com.formlaez.infrastructure.enumeration.WorkspaceMemberRole;
 import com.formlaez.infrastructure.model.entity.form.JpaForm;
 import com.formlaez.infrastructure.model.entity.form.JpaFormPage;
 import com.formlaez.infrastructure.model.entity.team.JpaTeam;

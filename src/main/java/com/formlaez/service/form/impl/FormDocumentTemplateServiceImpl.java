@@ -1,7 +1,6 @@
 package com.formlaez.service.form.impl;
 
 import com.formlaez.application.model.response.FormDocumentTemplateResponse;
-import com.formlaez.infrastructure.configuration.exception.ForbiddenException;
 import com.formlaez.infrastructure.configuration.exception.InvalidParamsException;
 import com.formlaez.infrastructure.converter.FormDocumentTemplateResponseConverter;
 import com.formlaez.infrastructure.repository.JpaFormDocumentTemplateRepository;

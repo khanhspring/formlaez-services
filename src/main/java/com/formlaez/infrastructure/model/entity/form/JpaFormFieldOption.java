@@ -1,17 +1,11 @@
 package com.formlaez.infrastructure.model.entity.form;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.formlaez.infrastructure.enumeration.FormFieldType;
 import com.formlaez.infrastructure.model.entity.JpaBaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.JdbcType;
 import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.annotations.Type;
-import org.hibernate.dialect.PostgreSQLJsonbJdbcType;
 import org.hibernate.type.SqlTypes;
-
-import java.math.BigDecimal;
 
 @Getter
 @Setter

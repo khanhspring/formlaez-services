@@ -1,8 +1,6 @@
 package com.formlaez.infrastructure.client.impl;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.formlaez.infrastructure.client.PaddleClient;
-import com.formlaez.infrastructure.client.model.AuthToken;
 import com.formlaez.infrastructure.client.model.PaddleResponse;
 import com.formlaez.infrastructure.client.model.PaddleUpdateUserResponse;
 import com.formlaez.infrastructure.configuration.exception.ApplicationException;

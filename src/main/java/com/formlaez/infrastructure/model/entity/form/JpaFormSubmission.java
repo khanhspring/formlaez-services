@@ -1,15 +1,12 @@
 package com.formlaez.infrastructure.model.entity.form;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.formlaez.infrastructure.enumeration.FormScope;
 import com.formlaez.infrastructure.enumeration.FormSubmissionStatus;
 import com.formlaez.infrastructure.model.entity.JpaBaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
-
-import java.util.List;
 
 @Getter
 @Setter

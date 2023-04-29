@@ -1,13 +1,10 @@
 package com.formlaez.service.helper;
 
 import com.formlaez.infrastructure.configuration.exception.ForbiddenException;
-import com.formlaez.infrastructure.enumeration.TeamMemberRole;
 import com.formlaez.infrastructure.repository.JpaTeamMemberRepository;
 import com.formlaez.infrastructure.util.AuthUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 import static com.formlaez.infrastructure.enumeration.TeamMemberRole.Owner;
 

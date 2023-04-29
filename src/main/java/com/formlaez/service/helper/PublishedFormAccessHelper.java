@@ -26,7 +26,7 @@ public class PublishedFormAccessHelper {
 
     private boolean isFormOwner(JpaForm form) {
         var currentUserId = AuthUtils.currentUserId();
-        return currentUserId.map(uuid -> uuid.equals(form.getCreatedBy()))
+        return currentUserId.map(id -> id.equals(form.getCreatedBy()))
                 .orElse(false);
     }
 

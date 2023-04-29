@@ -1,8 +1,6 @@
 package com.formlaez.service.paddle.impl;
 
 import com.formlaez.application.model.request.CancelSubscriptionRequest;
-import com.formlaez.infrastructure.configuration.exception.InvalidParamsException;
-import com.formlaez.infrastructure.enumeration.PaddleSubscriptionStatus;
 import com.formlaez.service.paddle.PaddleSubscriptionCancelledHandlerService;
 import com.formlaez.service.subscription.SubscriptionService;
 import lombok.RequiredArgsConstructor;

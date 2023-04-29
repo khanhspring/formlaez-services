@@ -1,8 +1,6 @@
 package com.formlaez.application.model.response.form;
 
 import com.formlaez.infrastructure.enumeration.FormSectionType;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.*;
 
 import java.util.List;

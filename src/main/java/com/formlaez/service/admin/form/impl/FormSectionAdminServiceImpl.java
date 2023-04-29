@@ -6,7 +6,6 @@ import com.formlaez.application.model.request.UpdateFormSectionRequest;
 import com.formlaez.infrastructure.configuration.exception.InvalidParamsException;
 import com.formlaez.infrastructure.configuration.exception.ResourceNotFoundException;
 import com.formlaez.infrastructure.enumeration.FormStatus;
-import com.formlaez.infrastructure.model.entity.form.JpaFormField;
 import com.formlaez.infrastructure.model.entity.form.JpaFormSection;
 import com.formlaez.infrastructure.repository.JpaFormFieldOptionRepository;
 import com.formlaez.infrastructure.repository.JpaFormFieldRepository;

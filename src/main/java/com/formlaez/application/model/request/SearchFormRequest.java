@@ -4,10 +4,6 @@ import com.formlaez.infrastructure.enumeration.FormScope;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.util.ObjectUtils;
-
-import java.util.Objects;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -17,7 +13,7 @@ public class SearchFormRequest {
     @NotNull
     private FormScope scope;
 
-    private UUID createdBy;
+    private String createdBy;
     private Long teamId;
     @NotNull
     private Long workspaceId;

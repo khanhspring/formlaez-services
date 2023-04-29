@@ -1,12 +1,12 @@
 package com.formlaez.application.api;
 
+import com.formlaez.application.model.request.ValidateTokenRequest;
 import com.formlaez.application.model.response.TokenResponse;
 import com.formlaez.infrastructure.client.AuthClient;
+import com.formlaez.service.auth.AuthService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TokenController {
 
     private final AuthClient authClient;
+    private final AuthService authService;
 
     @GetMapping("token")
     public TokenResponse token(@RequestParam String code) {
@@ -24,5 +25,10 @@ public class TokenController {
                 .tokenType(token.getTokenType())
                 .expiresIn(token.getExpiresIn())
                 .build();
+    }
+
+    @PostMapping("token/validation")
+    public void validate(@Valid @RequestBody ValidateTokenRequest request) {
+        authService.validateToken(request.getToken());
     }
 }

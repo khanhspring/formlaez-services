@@ -1,7 +1,10 @@
 package com.formlaez.infrastructure.docengine.util;
 
 import com.formlaez.infrastructure.docengine.exception.CloneRowException;
-import org.apache.poi.xwpf.usermodel.*;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.apache.poi.xwpf.usermodel.XWPFTable;
+import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTPPr;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTRPr;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTRow;

@@ -1,7 +1,6 @@
 package com.formlaez.infrastructure.model.entity.form;
 
 import com.formlaez.infrastructure.enumeration.FormFieldType;
-import com.formlaez.infrastructure.enumeration.FormSectionType;
 import com.formlaez.infrastructure.model.entity.JpaBaseEntity;
 import jakarta.persistence.*;
 import lombok.*;

@@ -5,14 +5,12 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.UUID;
-
 @Getter
 @Setter
 public class AddWorkspaceMemberRequest {
     private Long workspaceId;
     @NotNull
-    private UUID userId;
+    private String userId;
     @NotNull
     private WorkspaceMemberRole role;
 }

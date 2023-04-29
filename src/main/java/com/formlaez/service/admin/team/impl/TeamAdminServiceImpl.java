@@ -10,7 +10,6 @@ import com.formlaez.infrastructure.configuration.exception.ResourceNotFoundExcep
 import com.formlaez.infrastructure.configuration.exception.UnauthorizedException;
 import com.formlaez.infrastructure.converter.TeamResponseConverter;
 import com.formlaez.infrastructure.enumeration.TeamMemberRole;
-import com.formlaez.infrastructure.enumeration.WorkspaceMemberRole;
 import com.formlaez.infrastructure.model.entity.team.JpaTeam;
 import com.formlaez.infrastructure.model.entity.team.JpaTeamMember;
 import com.formlaez.infrastructure.repository.*;

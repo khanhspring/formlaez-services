@@ -12,7 +12,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.util.Objects;
-import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -26,7 +25,7 @@ public class FormSubmissionSearchResultRowMapper implements RowMapper<JpaFormSub
         JpaUser createdBy = null;
         if (rs.getString("createdByUserId") != null) {
             createdBy = JpaUser.builder()
-                    .id(UUID.fromString(rs.getString("createdByUserId")))
+                    .id(rs.getString("createdByUserId"))
                     .firstName(rs.getString("createdByUserFirstName"))
                     .lastName(rs.getString("createdByUserLastName"))
                     .email(rs.getString("createdByUserEmail"))
@@ -36,7 +35,7 @@ public class FormSubmissionSearchResultRowMapper implements RowMapper<JpaFormSub
         JpaUser lastModifiedBy = null;
         if (rs.getString("lastModifiedByUserId") != null) {
             lastModifiedBy = JpaUser.builder()
-                    .id(UUID.fromString(rs.getString("lastModifiedByUserId")))
+                    .id(rs.getString("lastModifiedByUserId"))
                     .firstName(rs.getString("lastModifiedByUserFirstName"))
                     .lastName(rs.getString("lastModifiedByUserLastName"))
                     .email(rs.getString("lastModifiedByUserEmail"))

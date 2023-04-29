@@ -8,16 +8,14 @@ import com.formlaez.application.model.response.WorkspaceMemberResponse;
 import com.formlaez.infrastructure.configuration.exception.InvalidParamsException;
 import com.formlaez.infrastructure.configuration.exception.ResourceNotFoundException;
 import com.formlaez.infrastructure.converter.UserResponseConverter;
-import com.formlaez.infrastructure.enumeration.TeamMemberRole;
 import com.formlaez.infrastructure.model.entity.JpaWorkspaceMember;
-import com.formlaez.infrastructure.model.entity.team.JpaTeamMember;
 import com.formlaez.infrastructure.repository.JpaTeamMemberRepository;
 import com.formlaez.infrastructure.repository.JpaUserRepository;
 import com.formlaez.infrastructure.repository.JpaWorkspaceMemberRepository;
 import com.formlaez.infrastructure.repository.JpaWorkspaceRepository;
 import com.formlaez.infrastructure.util.AuthUtils;
-import com.formlaez.service.helper.WorkspaceHelper;
 import com.formlaez.service.admin.workspace.WorkspaceMemberAdminService;
+import com.formlaez.service.helper.WorkspaceHelper;
 import com.formlaez.service.usage.WorkspaceUsageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,9 +23,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ObjectUtils;
-
-import java.util.stream.Collectors;
 
 import static com.formlaez.infrastructure.enumeration.WorkspaceMemberRole.Member;
 import static com.formlaez.infrastructure.enumeration.WorkspaceMemberRole.Owner;

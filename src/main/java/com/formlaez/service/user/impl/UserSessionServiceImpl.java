@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import java.util.Objects;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.formlaez.infrastructure.enumeration.WorkspaceMemberRole.Owner;
@@ -27,7 +26,7 @@ public class UserSessionServiceImpl implements UserSessionService {
 
     @Override
     public UserSessionResponse getCurrentUserSession() {
-        UUID currentUserId = AuthUtils.currentUserIdOrElseThrow();
+        String currentUserId = AuthUtils.currentUserIdOrElseThrow();
         var jpaWorkspaces = jpaWorkspaceMemberRepository.findAllByUserId(currentUserId,  Sort.by("createdDate"));
         var joinedWorkspaces = jpaWorkspaces.stream()
                 .map(this::toResponse)

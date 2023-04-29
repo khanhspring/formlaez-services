@@ -21,7 +21,6 @@ import com.formlaez.service.storage.CloudStorageService;
 import com.formlaez.service.usage.WorkspaceUsageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

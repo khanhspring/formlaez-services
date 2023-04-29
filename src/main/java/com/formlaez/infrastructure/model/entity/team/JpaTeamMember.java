@@ -1,7 +1,6 @@
 package com.formlaez.infrastructure.model.entity.team;
 
 import com.formlaez.infrastructure.enumeration.TeamMemberRole;
-import com.formlaez.infrastructure.enumeration.WorkspaceMemberRole;
 import com.formlaez.infrastructure.model.entity.JpaBaseEntity;
 import com.formlaez.infrastructure.model.entity.JpaUser;
 import jakarta.persistence.*;

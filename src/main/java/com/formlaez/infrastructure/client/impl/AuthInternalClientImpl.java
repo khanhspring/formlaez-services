@@ -16,7 +16,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import java.util.Objects;
-import java.util.UUID;
 
 @Slf4j
 @Service
@@ -32,14 +31,14 @@ public class AuthInternalClientImpl implements AuthInternalClient {
     }
 
     @Override
-    public ResponseId<UUID> createUser(CreateUserRequest request) {
+    public ResponseId<String> createUser(CreateUserRequest request) {
         try {
-            ResponseEntity<ResponseId<UUID>> response = webClient.post()
+            ResponseEntity<ResponseId<String>> response = webClient.post()
                     .uri("/users")
                     .contentType(MediaType.APPLICATION_JSON)
                     .bodyValue(request)
                     .retrieve()
-                    .toEntity(new ParameterizedTypeReference<ResponseId<UUID>>() {})
+                    .toEntity(new ParameterizedTypeReference<ResponseId<String>>() {})
                     .block();
             return Objects.requireNonNull(response).getBody();
         } catch (WebClientResponseException e) {

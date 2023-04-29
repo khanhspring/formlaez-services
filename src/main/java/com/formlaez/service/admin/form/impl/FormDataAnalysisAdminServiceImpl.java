@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +38,9 @@ public class FormDataAnalysisAdminServiceImpl implements FormDataAnalysisAdminSe
                     // only support for Single fields for now
                     for (var field : section.getFields()) {
                         var item = formDataAnalysisHelper.analyze(form, field);
-                        items.add(item);
+                        if (Objects.nonNull(item)) {
+                            items.add(item);
+                        }
                     }
                 }
             }

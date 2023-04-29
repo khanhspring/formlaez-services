@@ -1,7 +1,6 @@
 package com.formlaez.infrastructure.scheduler;
 
 import com.formlaez.infrastructure.enumeration.WorkspaceType;
-import com.formlaez.infrastructure.repository.JpaSubscriptionRepository;
 import com.formlaez.infrastructure.repository.JpaWorkspaceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;

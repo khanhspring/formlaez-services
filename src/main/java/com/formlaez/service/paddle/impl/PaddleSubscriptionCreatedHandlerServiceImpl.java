@@ -7,7 +7,6 @@ import com.formlaez.infrastructure.configuration.exception.InvalidParamsExceptio
 import com.formlaez.infrastructure.enumeration.PaddleSubscriptionStatus;
 import com.formlaez.infrastructure.model.common.paddle.PaddlePassThrough;
 import com.formlaez.infrastructure.property.PaddleProperties;
-import com.formlaez.infrastructure.repository.JpaSubscriptionRepository;
 import com.formlaez.service.paddle.PaddleSubscriptionCreatedHandlerService;
 import com.formlaez.service.subscription.SubscriptionService;
 import lombok.RequiredArgsConstructor;
@@ -20,10 +19,8 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.TreeMap;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -53,7 +50,7 @@ public class PaddleSubscriptionCreatedHandlerServiceImpl implements PaddleSubscr
         var createSubscriptionRequest = CreateSubscriptionRequest.builder()
                 .validFrom(Instant.now())
                 .validTill(nextBillDate)
-                .subscribedUserId(UUID.fromString(passThrough.getUserId()))
+                .subscribedUserId(passThrough.getUserId())
                 .workspaceId(passThrough.getWorkspaceId())
                 .externalId(subscriptionId)
                 .cancelUrl(cancelUrl)

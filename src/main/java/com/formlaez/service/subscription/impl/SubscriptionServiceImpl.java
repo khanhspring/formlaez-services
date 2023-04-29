@@ -15,7 +15,6 @@ import com.formlaez.infrastructure.property.PaddleProperties;
 import com.formlaez.infrastructure.repository.JpaSubscriptionRepository;
 import com.formlaez.infrastructure.repository.JpaUserRepository;
 import com.formlaez.infrastructure.repository.JpaWorkspaceRepository;
-import com.formlaez.infrastructure.scheduler.SubscriptionExpiredScheduler;
 import com.formlaez.service.subscription.SubscriptionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,10 +24,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.Objects;
-
-import static com.formlaez.infrastructure.scheduler.SubscriptionExpiredScheduler.EXPIRED_DAYS;
 
 @Service
 @RequiredArgsConstructor

@@ -6,14 +6,13 @@ import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Component
 @AllArgsConstructor
-public class AuditorAwareImpl implements AuditorAware<UUID> {
+public class AuditorAwareImpl implements AuditorAware<String> {
 
     @Override
-    public Optional<UUID> getCurrentAuditor() {
+    public Optional<String> getCurrentAuditor() {
         return AuthUtils.currentUserId();
     }
 }

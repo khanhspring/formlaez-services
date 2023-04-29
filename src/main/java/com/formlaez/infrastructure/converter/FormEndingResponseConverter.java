@@ -1,8 +1,6 @@
 package com.formlaez.infrastructure.converter;
 
 import com.formlaez.application.model.response.form.FormEndingResponse;
-import com.formlaez.application.model.response.form.FormResponse;
-import com.formlaez.infrastructure.model.entity.form.JpaForm;
 import com.formlaez.infrastructure.model.entity.form.JpaFormEnding;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.converter.Converter;

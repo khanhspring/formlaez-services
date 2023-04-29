@@ -2,8 +2,6 @@ package com.formlaez.application.model.response.form;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.formlaez.application.model.response.UserResponse;
-import com.formlaez.infrastructure.enumeration.FormCoverType;
-import com.formlaez.infrastructure.enumeration.FormScope;
 import lombok.*;
 
 import java.time.Instant;

@@ -39,7 +39,7 @@ dependencies {
     implementation platform('com.amazonaws:aws-java-sdk-bom:1.12.425')
     implementation 'com.amazonaws:aws-java-sdk-s3'
     implementation 'com.amazonaws:aws-java-sdk-ses'
-    implementation 'com.sendgrid:sendgrid-java:4.9.3'
+    implementation 'com.google.firebase:firebase-admin:9.1.1'
 
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'

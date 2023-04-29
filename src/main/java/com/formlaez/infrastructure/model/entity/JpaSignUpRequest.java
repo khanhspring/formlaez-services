@@ -1,7 +1,6 @@
 package com.formlaez.infrastructure.model.entity;
 
 import com.formlaez.infrastructure.enumeration.SignUpRequestStatus;
-import com.formlaez.infrastructure.enumeration.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -11,21 +11,20 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 public interface JpaWorkspaceMemberRepository extends JpaRepository<JpaWorkspaceMember, Long> {
     Page<JpaWorkspaceMember> findByWorkspaceId(Long workspaceId, Pageable pageable);
-    Optional<JpaWorkspaceMember> findByUserIdAndWorkspaceId(UUID userId, Long workspaceId);
-    boolean existsByUserIdAndWorkspaceId(UUID userId, Long workspaceId);
-    List<JpaWorkspaceMember> findAllByUserId(UUID userId, Sort sort);
+    Optional<JpaWorkspaceMember> findByUserIdAndWorkspaceId(String userId, Long workspaceId);
+    boolean existsByUserIdAndWorkspaceId(String userId, Long workspaceId);
+    List<JpaWorkspaceMember> findAllByUserId(String userId, Sort sort);
 
-    boolean existsByRoleAndWorkspaceIdAndUserIdNot(WorkspaceMemberRole role, Long workspaceId, UUID userId);
+    boolean existsByRoleAndWorkspaceIdAndUserIdNot(WorkspaceMemberRole role, Long workspaceId, String userId);
 
     @Query("select o from JpaWorkspaceMember o" +
             " where" +
             " o.user.id = :userId" +
             " and o.workspace.createdBy = :userId")
-    List<JpaWorkspaceMember> findAllByCreatedUserId(UUID userId);
+    List<JpaWorkspaceMember> findAllByCreatedUserId(String userId);
 
     @Query("select o from JpaWorkspaceMember o" +
             " where 1=1" +

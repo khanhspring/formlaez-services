@@ -2,8 +2,6 @@ package com.formlaez.application.model.request;
 
 import lombok.*;
 
-import java.util.UUID;
-
 @Getter
 @Setter
 @Builder
@@ -11,5 +9,5 @@ import java.util.UUID;
 @AllArgsConstructor
 public class RemoveWorkspaceMemberRequest {
     private Long workspaceId;
-    private UUID userId;
+    private String userId;
 }

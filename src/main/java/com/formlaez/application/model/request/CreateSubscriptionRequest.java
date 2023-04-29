@@ -4,7 +4,6 @@ import com.formlaez.infrastructure.enumeration.WorkspaceType;
 import lombok.*;
 
 import java.time.Instant;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -18,7 +17,7 @@ public class CreateSubscriptionRequest {
     private Instant validFrom;
     private Instant validTill;
 
-    private UUID subscribedUserId;
+    private String subscribedUserId;
 
     private String cancelUrl;
     private String externalId;

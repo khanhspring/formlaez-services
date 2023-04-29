@@ -2,12 +2,8 @@ package com.formlaez.service.helper;
 
 import com.formlaez.infrastructure.configuration.exception.ForbiddenException;
 import com.formlaez.infrastructure.enumeration.FormScope;
-import com.formlaez.infrastructure.enumeration.FormSharingScope;
-import com.formlaez.infrastructure.enumeration.FormStatus;
-import com.formlaez.infrastructure.enumeration.WorkspaceMemberRole;
 import com.formlaez.infrastructure.model.entity.form.JpaForm;
 import com.formlaez.infrastructure.repository.JpaTeamMemberRepository;
-import com.formlaez.infrastructure.repository.JpaWorkspaceMemberRepository;
 import com.formlaez.infrastructure.util.AuthUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -18,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class FormAdminAccessHelper {
 
     private final JpaTeamMemberRepository jpaTeamMemberRepository;
-    private final JpaWorkspaceMemberRepository jpaWorkspaceMemberRepository;
 
     @Transactional(readOnly = true)
     public void checkAccess(JpaForm form) {

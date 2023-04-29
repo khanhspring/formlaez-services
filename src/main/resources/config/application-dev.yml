@@ -10,7 +10,8 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: ${formlaez.authUrl}
+          issuer-uri: https://securetoken.google.com/formini-so
+          jwk-set-uri: https://www.googleapis.com/robot/v1/metadata/jwk/securetoken@system.gserviceaccount.com
 
 formlaez:
   domainName: formini.so
@@ -42,6 +43,9 @@ formlaez:
       signUpTemplateId: SignUp
       welcomeTemplateId: Welcome
       primaryEmail: hello@formini.so
+
+  firebase:
+    serviceAccountJsonFile: classpath:certs/firebase.json
 
   paddle:
     publicKey: classpath:certs/paddle.pub

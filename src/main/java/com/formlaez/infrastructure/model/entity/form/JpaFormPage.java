@@ -1,8 +1,6 @@
 package com.formlaez.infrastructure.model.entity.form;
 
-import com.formlaez.infrastructure.enumeration.FormCoverType;
 import com.formlaez.infrastructure.model.entity.JpaBaseEntity;
-import com.formlaez.infrastructure.model.entity.JpaWorkspace;
 import jakarta.persistence.*;
 import lombok.*;
 

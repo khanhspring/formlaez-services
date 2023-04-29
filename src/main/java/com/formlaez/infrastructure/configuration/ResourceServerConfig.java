@@ -28,7 +28,7 @@ public class ResourceServerConfig {
                 .csrf().disable()
                 .securityMatcher("/internal/**")
                 .authorizeHttpRequests()
-                .requestMatchers("/internal/ping/**").permitAll()
+                .requestMatchers("/ping/**", "/auth/token/validation").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic();

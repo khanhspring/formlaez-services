@@ -14,8 +14,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
-
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(value = "/admin/workspaces")
@@ -58,7 +56,7 @@ public class WorkspaceAdminController {
 
     @DeleteMapping("{workspaceId}/members/{userId}")
     public void removeMember(@PathVariable Long workspaceId,
-                             @PathVariable UUID userId) {
+                             @PathVariable String userId) {
         var request = RemoveWorkspaceMemberRequest.builder()
                 .userId(userId)
                 .workspaceId(workspaceId)
@@ -68,7 +66,7 @@ public class WorkspaceAdminController {
 
     @PutMapping("{workspaceId}/members/{userId}")
     public void updateRole(@PathVariable Long workspaceId,
-                           @PathVariable UUID userId,
+                           @PathVariable String userId,
                            @RequestBody @Valid UpdateWorkspaceMemberRoleRequest request) {
         request.setWorkspaceId(workspaceId);
         request.setUserId(userId);

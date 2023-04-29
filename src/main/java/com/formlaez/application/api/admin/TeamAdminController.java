@@ -4,7 +4,6 @@ import com.formlaez.application.model.request.*;
 import com.formlaez.application.model.response.ResponseId;
 import com.formlaez.application.model.response.TeamMemberResponse;
 import com.formlaez.application.model.response.TeamResponse;
-import com.formlaez.application.model.response.form.FormSubmissionResponse;
 import com.formlaez.service.admin.team.TeamAdminService;
 import com.formlaez.service.admin.team.TeamMemberAdminService;
 import jakarta.validation.Valid;
@@ -14,8 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
@@ -57,7 +54,7 @@ public class TeamAdminController {
 
     @DeleteMapping("{teamId}/members/{userId}")
     public void addMember(@PathVariable Long teamId,
-                          @PathVariable UUID userId) {
+                          @PathVariable String userId) {
         var request = RemoveTeamMemberRequest.builder()
                 .teamId(teamId)
                 .userId(userId)
@@ -75,7 +72,7 @@ public class TeamAdminController {
 
     @PutMapping("{teamId}/members/{userId}")
     public void updateRole(@PathVariable Long teamId,
-                                       @PathVariable UUID userId,
+                                       @PathVariable String userId,
                                        @RequestBody @Valid UpdateTeamMemberRoleRequest request) {
         request.setTeamId(teamId);
         request.setUserId(userId);

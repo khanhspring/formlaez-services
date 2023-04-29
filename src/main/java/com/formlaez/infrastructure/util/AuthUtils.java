@@ -9,25 +9,20 @@ import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 import java.util.Optional;
-import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
 public class AuthUtils {
 
-    private static final String USER_ID_CLAIM = "uid";
+    public static final String USER_ID_CLAIM = "user_id";
 
-    public static Optional<UUID> currentUserId() {
-        var auth = SecurityContextHolder.getContext().getAuthentication();
-        if (Objects.isNull(auth)) {
+    public static Optional<String> currentUserId() {
+        var jwt = AuthUtils.getPrinciple();
+        if (jwt.isEmpty()) {
             return Optional.empty();
         }
-        var principal = auth.getPrincipal();
-        if (!(principal instanceof Jwt jwt)) {
-            return Optional.empty();
-        }
-        String uid = jwt.getClaim(USER_ID_CLAIM);
-        return Optional.of(UUID.fromString(uid));
+        String uid = jwt.get().getClaim(USER_ID_CLAIM);
+        return Optional.of(uid);
     }
 
     public static boolean isAuthenticated() {
@@ -44,7 +39,19 @@ public class AuthUtils {
         return auth.isAuthenticated();
     }
 
-    public static UUID currentUserIdOrElseThrow() {
+    public static String currentUserIdOrElseThrow() {
         return currentUserId().orElseThrow(UnauthorizedException::new);
+    }
+
+    public static Optional<Jwt> getPrinciple() {
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+        if (Objects.isNull(auth)) {
+            return Optional.empty();
+        }
+        var principal = auth.getPrincipal();
+        if (!(principal instanceof Jwt jwt)) {
+            return Optional.empty();
+        }
+        return Optional.of(jwt);
     }
 }
