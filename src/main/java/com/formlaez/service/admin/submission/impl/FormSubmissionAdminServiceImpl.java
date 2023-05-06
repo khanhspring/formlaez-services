@@ -89,11 +89,11 @@ public class FormSubmissionAdminServiceImpl implements FormSubmissionAdminServic
         var searchResults = jpaFormSubmissionRepository.search(searchRequest, Pageable.unpaged());
         var submissions = searchResults.stream()
                 .map(JpaFormSubmissionProjection::getFormSubmission)
-                .collect(Collectors.toList());
+                .toList();
 
         var csvInfo = formSubmissionDataCsvConverter.convert(form, submissions);
         var headerNames = csvInfo.headerNames();
-        if (headerNames.size() > 0) {
+        if (!headerNames.isEmpty()) {
             // using BOM to avoid utf8 encoding errors when open in Windows
             headerNames.set(0, CsvUtils.UTF8_BOM + headerNames.get(0));
         }
@@ -104,8 +104,8 @@ public class FormSubmissionAdminServiceImpl implements FormSubmissionAdminServic
                 .build();
         try (CSVPrinter csvPrinter = new CSVPrinter(writer, csvFormat)) {
             var recordValues = csvInfo.recordValues();
-            for (var record : recordValues) {
-                csvPrinter.printRecord(record);
+            for (var row : recordValues) {
+                csvPrinter.printRecord(row);
             }
             csvPrinter.flush();
         } catch (Exception e) {

@@ -105,9 +105,9 @@ public class FormSubmissionDataCsvConverter {
         }
         List<CsvRecord> records = new ArrayList<>();
         for (var submission : submissions) {
-            var record = processRecord(headers, submission);
-            if (Objects.nonNull(record)) {
-                records.add(record);
+            var row = processRecord(headers, submission);
+            if (Objects.nonNull(row)) {
+                records.add(row);
             }
         }
         return records;
@@ -118,18 +118,17 @@ public class FormSubmissionDataCsvConverter {
         if (Objects.isNull(data)) {
             return null;
         }
-        var record = new CsvRecord();
+        var row = new CsvRecord();
         for (var header : headers) {
 
             if (!header.hasChildren()) {
-                var rawValue = data.get(header.getId());
-                String value = formFieldValueConverter.asTextValue(header.getField(), rawValue, "");
+                String value = formFieldValueConverter.asTextValue(header.getField(), data, "");
                 var recordItem = CsvRecordItem.builder()
                         .headerId(header.getId())
-                            .values(List.of(value))
+                        .values(List.of(value))
                         .build();
 
-                record.addItem(recordItem);
+                row.addItem(recordItem);
                 continue;
             }
             var rawData = data.get(header.getId());
@@ -149,10 +148,10 @@ public class FormSubmissionDataCsvConverter {
                         .headerId(header.getId())
                         .values(values)
                         .build();
-                record.addItem(recordItem);
+                row.addItem(recordItem);
             }
 
         }
-        return record;
+        return row;
     }
 }

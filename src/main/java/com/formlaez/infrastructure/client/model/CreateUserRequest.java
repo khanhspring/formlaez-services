@@ -10,6 +10,7 @@ import lombok.*;
 public class CreateUserRequest {
     private String email;
     private String password;
+    private String rawPassword;
     private String firstName;
     private String lastName;
 }

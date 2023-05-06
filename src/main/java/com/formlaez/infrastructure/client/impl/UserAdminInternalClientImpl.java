@@ -1,12 +1,14 @@
 package com.formlaez.infrastructure.client.impl;
 
 import com.formlaez.application.model.response.ResponseId;
-import com.formlaez.infrastructure.client.AuthInternalClient;
+import com.formlaez.infrastructure.client.UserAdminClient;
 import com.formlaez.infrastructure.client.model.ChangeUserPasswordRequest;
 import com.formlaez.infrastructure.client.model.CreateUserRequest;
 import com.formlaez.infrastructure.configuration.exception.ApplicationException;
 import com.formlaez.infrastructure.property.AuthInternalClientProperties;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -18,12 +20,13 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import java.util.Objects;
 
 @Slf4j
-@Service
-public class AuthInternalClientImpl implements AuthInternalClient {
+@Primary
+@Service("userAdminInternalClient")
+public class UserAdminInternalClientImpl implements UserAdminClient {
 
     private final WebClient webClient;
 
-    public AuthInternalClientImpl(AuthInternalClientProperties properties) {
+    public UserAdminInternalClientImpl(AuthInternalClientProperties properties) {
         webClient = WebClient.builder()
                 .baseUrl(properties.getBaseUrl())
                 .defaultHeader(HttpHeaders.AUTHORIZATION, properties.getAuthorization())

@@ -4,7 +4,7 @@ import com.formlaez.application.model.response.ResponseId;
 import com.formlaez.infrastructure.client.model.ChangeUserPasswordRequest;
 import com.formlaez.infrastructure.client.model.CreateUserRequest;
 
-public interface AuthInternalClient {
+public interface UserAdminClient {
     ResponseId<String> createUser(CreateUserRequest request);
     void changeUserPassword(ChangeUserPasswordRequest request);
 }

@@ -2,7 +2,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/formlaez
     username: postgres
-    password: 6*[)s8G'Vs#rQUsm
+    password: postgres
     hikari:
       connection-init-sql: SET TIME ZONE 'UTC'
 

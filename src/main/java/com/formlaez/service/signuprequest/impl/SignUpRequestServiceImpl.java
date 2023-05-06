@@ -3,7 +3,7 @@ package com.formlaez.service.signuprequest.impl;
 import com.formlaez.application.model.request.ConfirmSignUpRequest;
 import com.formlaez.application.model.request.EmailTemplatedSendingRequest;
 import com.formlaez.application.model.request.SignUpRequest;
-import com.formlaez.infrastructure.client.AuthInternalClient;
+import com.formlaez.infrastructure.client.UserAdminClient;
 import com.formlaez.infrastructure.client.model.CreateUserRequest;
 import com.formlaez.infrastructure.configuration.exception.DuplicatedException;
 import com.formlaez.infrastructure.configuration.exception.InvalidParamsException;
@@ -19,6 +19,7 @@ import com.formlaez.infrastructure.util.RandomUtils;
 import com.formlaez.service.email.EmailService;
 import com.formlaez.service.signuprequest.SignUpRequestService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,16 +31,30 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-@RequiredArgsConstructor
 public class SignUpRequestServiceImpl implements SignUpRequestService {
 
     private static final int EXPIRE_DAYS = 1;
     private final JpaUserRepository jpaUserRepository;
     private final JpaSignUpRequestRepository jpaSignUpRequestRepository;
     private final PasswordEncoder passwordEncoder;
-    private final AuthInternalClient authInternalClient;
+    private final UserAdminClient userAdminClient;
     private final EmailService emailService;
     private final AwsProperties awsProperties;
+
+
+    public SignUpRequestServiceImpl(JpaUserRepository jpaUserRepository,
+                                    JpaSignUpRequestRepository jpaSignUpRequestRepository,
+                                    PasswordEncoder passwordEncoder,
+                                    @Qualifier("userAdminFirebaseClient") UserAdminClient userAdminClient,
+                                    EmailService emailService,
+                                    AwsProperties awsProperties) {
+        this.jpaUserRepository = jpaUserRepository;
+        this.jpaSignUpRequestRepository = jpaSignUpRequestRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.userAdminClient = userAdminClient;
+        this.emailService = emailService;
+        this.awsProperties = awsProperties;
+    }
 
     @Override
     @Transactional
@@ -82,8 +97,8 @@ public class SignUpRequestServiceImpl implements SignUpRequestService {
             throw new InvalidParamsException("Verification code has expired or incorrect");
         }
 
-        signUpRequest.setFirstName(request.getFirstName());
-        signUpRequest.setLastName(request.getLastName());
+        signUpRequest.setFirstName(request.getFirstName().trim());
+        signUpRequest.setLastName(request.getLastName().trim());
         signUpRequest.setPassword(passwordEncoder.encode(request.getPassword()));
         signUpRequest.setStatus(SignUpRequestStatus.Success);
         jpaSignUpRequestRepository.save(signUpRequest);
@@ -93,8 +108,9 @@ public class SignUpRequestServiceImpl implements SignUpRequestService {
                 .lastName(signUpRequest.getLastName())
                 .email(signUpRequest.getEmail())
                 .password(signUpRequest.getPassword())
+                .rawPassword(request.getPassword())
                 .build();
-        var response = authInternalClient.createUser(createUserRequest);
+        var response = userAdminClient.createUser(createUserRequest);
 
         var user = JpaUser.builder()
                 .id(response.getId())
@@ -103,6 +119,7 @@ public class SignUpRequestServiceImpl implements SignUpRequestService {
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .status(UserStatus.Active)
+                .password(signUpRequest.getPassword())
                 .build();
         jpaUserRepository.save(user);
 

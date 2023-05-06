@@ -22,6 +22,7 @@ public class JpaUser extends JpaBaseEntity {
     private String firstName;
     private String lastName;
     private String email;
+    private String password;
 
     @Enumerated(EnumType.STRING)
     private UserStatus status;
