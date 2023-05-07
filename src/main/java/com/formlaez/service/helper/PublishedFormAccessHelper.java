@@ -9,6 +9,8 @@ import com.formlaez.infrastructure.util.AuthUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 @Component
 @RequiredArgsConstructor
 public class PublishedFormAccessHelper {
@@ -30,6 +32,21 @@ public class PublishedFormAccessHelper {
                 .orElse(false);
     }
 
+    private boolean isMemberOfTheTeamThatTheFormBelongTo(JpaForm form) {
+        if (Objects.isNull(form.getTeam())) {
+            return false;
+        }
+        var currentUserId = AuthUtils.currentUserId();
+        if (currentUserId.isEmpty()) {
+            return false;
+        }
+        return form.getTeam()
+                .getMembers()
+                .stream()
+                .map(m -> m.getUser().getId())
+                .anyMatch(uid -> uid.equals(currentUserId.get()));
+    }
+
     private void checkAuthenticatedAccess(JpaForm form) {
         if (!AuthUtils.isAuthenticated()) {
             // return to continue next steps
@@ -37,6 +54,10 @@ public class PublishedFormAccessHelper {
         }
         if (isFormOwner(form)) {
             // the form owner can access their form in any sharing scope
+            return;
+        }
+        if (isMemberOfTheTeamThatTheFormBelongTo(form)) {
+            // the team members can access the form in any sharing scope
             return;
         }
         if (form.getSharingScope().getLevel() < FormSharingScope.Authenticated.getLevel()) {
