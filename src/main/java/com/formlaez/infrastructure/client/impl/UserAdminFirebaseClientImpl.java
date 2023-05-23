@@ -47,7 +47,6 @@ public class UserAdminFirebaseClientImpl implements UserAdminClient {
         try {
             var updateRequest = new UserRecord.UpdateRequest(request.getUserId())
                     .setPassword(request.getNewPassword());
-
             FirebaseAuth.getInstance().updateUser(updateRequest);
         } catch (Exception e) {
             log.error("Change user password error", e);

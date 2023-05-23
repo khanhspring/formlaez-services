@@ -64,6 +64,6 @@ public class ResourceServerConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
-                .requestMatchers("/webhook/paddle/**");
+                .requestMatchers("/webhook/paddle/**", "admin/forms/stream/**");
     }
 }

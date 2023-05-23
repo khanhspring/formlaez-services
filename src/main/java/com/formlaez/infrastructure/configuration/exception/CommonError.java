@@ -17,7 +17,9 @@ public enum CommonError implements Error {
     ResourceNotfound("995", "Resource not found"),
     Duplicated("994", "Duplicated"),
     InvalidParams("993", "Invalid parameters"),
-    UsageLimitExceeded("992", "Usage limit exceeded");
+    UsageLimitExceeded("992", "Usage limit exceeded"),
+    OpenAIApiNotfound("991", "OpenAI API key not found"),
+    OpenAIApiError("990", "OpenAI API error");
 
     private final String code;
     private final String message;

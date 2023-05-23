@@ -102,3 +102,19 @@ databaseChangeLog:
         - sqlFile:
             splitStatements: true
             path: db/changelog/scripts/0.0.1__013__create_table_sign_up_request.sql
+
+  - changeSet:
+      id: 0.0.1__014__create_table_openai_api_setting
+      author: khanhspring
+      changes:
+        - sqlFile:
+            splitStatements: true
+            path: db/changelog/scripts/0.0.1__014__create_table_openai_api_setting.sql
+
+  - changeSet:
+      id: 0.0.1__015__alter_table_form_field_option
+      author: khanhspring
+      changes:
+        - sqlFile:
+            splitStatements: true
+            path: db/changelog/scripts/0.0.1__015__alter_table_form_field_option.sql

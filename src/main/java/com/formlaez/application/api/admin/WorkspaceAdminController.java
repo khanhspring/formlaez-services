@@ -3,7 +3,9 @@ package com.formlaez.application.api.admin;
 import com.formlaez.application.model.request.*;
 import com.formlaez.application.model.response.ResponseId;
 import com.formlaez.application.model.response.WorkspaceMemberResponse;
+import com.formlaez.application.model.response.WorkspaceOpenAIApiResponse;
 import com.formlaez.application.model.response.WorkspaceResponse;
+import com.formlaez.service.admin.workspace.WorkspaceOpenApiSettingAdminService;
 import com.formlaez.service.admin.workspace.WorkspaceAdminService;
 import com.formlaez.service.admin.workspace.WorkspaceMemberAdminService;
 import jakarta.validation.Valid;
@@ -21,6 +23,7 @@ public class WorkspaceAdminController {
 
     private final WorkspaceAdminService workspaceAdminService;
     private final WorkspaceMemberAdminService workspaceMemberAdminService;
+    private final WorkspaceOpenApiSettingAdminService workspaceOpenApiSettingAdminService;
 
     @PostMapping
     public ResponseId<Long> create(@Valid @RequestBody CreateWorkspaceRequest request) {
@@ -71,5 +74,17 @@ public class WorkspaceAdminController {
         request.setWorkspaceId(workspaceId);
         request.setUserId(userId);
         workspaceMemberAdminService.updateRole(request);
+    }
+
+    @GetMapping("{workspaceId}/openai-api")
+    public WorkspaceOpenAIApiResponse getOpenAIApiSetting(@PathVariable Long workspaceId) {
+        return workspaceOpenApiSettingAdminService.get(workspaceId);
+    }
+
+    @PostMapping("{workspaceId}/openai-api")
+    public void updateOpenAIApiSetting(@PathVariable Long workspaceId,
+                                     @RequestBody @Valid UpdateOpenAIApiSettingRequest request) {
+        request.setWorkspaceId(workspaceId);
+        workspaceOpenApiSettingAdminService.update(request);
     }
 }
