@@ -1,5 +1,6 @@
 package com.formlaez.infrastructure.docengine;
 
+import com.formlaez.infrastructure.configuration.exception.ApplicationException;
 import com.formlaez.infrastructure.docengine.cleaner.DocumentCleaner;
 import com.formlaez.infrastructure.docengine.preprocessor.PreProcessor;
 import com.formlaez.infrastructure.docengine.processor.Processor;
@@ -16,14 +17,7 @@ public class DocumentProcessor {
 
     public void process(InputStream inputStream, OutputStream outputStream, Variable vars) {
         try {
-            DocumentLoader loader = new DocumentLoader();
-            DocumentCleaner cleaner = new DocumentCleaner();
-            PreProcessor preProcessor = new PreProcessor();
-            XWPFDocument document = loader.load(inputStream);
-            cleaner.clean(document);
-            preProcessor.execute(document, vars);
-            Processor processor = new Processor();
-            processor.execute(document, vars);
+            XWPFDocument document = processAndGetDocument(inputStream, vars);
             DocumentWriter writer = new DocumentWriter();
             writer.write(document, outputStream);
             inputStream.close();
@@ -32,14 +26,25 @@ public class DocumentProcessor {
         }
     }
 
-    public byte[] process(InputStream inputStream, Variable vars) {
+    public ByteArrayOutputStream processToByteArray(InputStream inputStream, Variable vars) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        process(inputStream, outputStream, vars);
+        return outputStream;
+    }
+
+    public XWPFDocument processAndGetDocument(InputStream inputStream, Variable vars) {
         try {
-            var outputStream = new ByteArrayOutputStream();
-            process(inputStream, outputStream, vars);
-            return outputStream.toByteArray();
+            DocumentLoader loader = new DocumentLoader();
+            DocumentCleaner cleaner = new DocumentCleaner();
+            PreProcessor preProcessor = new PreProcessor();
+            XWPFDocument document = loader.load(inputStream);
+            cleaner.clean(document);
+            preProcessor.execute(document, vars);
+            Processor processor = new Processor();
+            processor.execute(document, vars);
+            return document;
         } catch (Exception e) {
-            log.warn("Process document error", e);
+            throw new ApplicationException(e);
         }
-        return new byte[0];
     }
 }

@@ -5,6 +5,7 @@ import com.formlaez.application.model.request.MergeDocumentFormSubmissionRequest
 import com.formlaez.infrastructure.configuration.exception.ForbiddenException;
 import com.formlaez.infrastructure.configuration.exception.InvalidParamsException;
 import com.formlaez.infrastructure.configuration.exception.ResourceNotFoundException;
+import com.formlaez.infrastructure.enumeration.DocumentMergeFileType;
 import com.formlaez.infrastructure.enumeration.FormSubmissionStatus;
 import com.formlaez.infrastructure.model.entity.form.JpaFormSubmission;
 import com.formlaez.infrastructure.repository.JpaFormRepository;
@@ -17,6 +18,8 @@ import com.formlaez.service.usage.WorkspaceUsageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -58,6 +61,8 @@ public class FormSubmissionServiceImpl implements FormSubmissionService {
         }
 
         workspaceUsageService.checkSubmissionLimitAndIncreaseOrElseThrow(form.getWorkspace().getId());
-        return formSubmissionDocumentMergeHelper.mergeDocument(submission, request.getTemplateId());
+
+        var fileType = Objects.requireNonNullElse(request.getFileType(), DocumentMergeFileType.Docx);
+        return formSubmissionDocumentMergeHelper.mergeDocument(submission, request.getTemplateId(), fileType);
     }
 }

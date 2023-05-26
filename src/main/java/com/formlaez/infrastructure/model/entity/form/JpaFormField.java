@@ -1,7 +1,7 @@
 package com.formlaez.infrastructure.model.entity.form;
 
 import com.formlaez.infrastructure.enumeration.FormFieldType;
-import com.formlaez.infrastructure.model.entity.JpaBaseEntity;
+import com.formlaez.infrastructure.model.entity.JpaBaseEntityWithoutVersion;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "form_field")
-public class JpaFormField extends JpaBaseEntity {
+public class JpaFormField extends JpaBaseEntityWithoutVersion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

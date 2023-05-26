@@ -1,7 +1,7 @@
 package com.formlaez.infrastructure.model.entity.form;
 
 import com.formlaez.infrastructure.enumeration.FormSectionType;
-import com.formlaez.infrastructure.model.entity.JpaBaseEntity;
+import com.formlaez.infrastructure.model.entity.JpaBaseEntityWithoutVersion;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "form_section")
-public class JpaFormSection extends JpaBaseEntity {
+public class JpaFormSection extends JpaBaseEntityWithoutVersion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

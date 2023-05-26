@@ -19,6 +19,7 @@ import com.formlaez.infrastructure.util.AuthUtils;
 import com.formlaez.infrastructure.util.RandomUtils;
 import com.formlaez.service.admin.workspace.WorkspaceAdminService;
 import com.formlaez.service.helper.WorkspaceHelper;
+import com.formlaez.service.usage.WorkspaceUsageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +32,7 @@ public class WorkspaceAdminServiceImpl implements WorkspaceAdminService {
     private final JpaWorkspaceMemberRepository jpaWorkspaceMemberRepository;
     private final JpaUserRepository jpaUserRepository;
     private final WorkspaceHelper workspaceHelper;
+    private final WorkspaceUsageService workspaceUsageService;
 
     @Override
     @Transactional
@@ -58,6 +60,7 @@ public class WorkspaceAdminServiceImpl implements WorkspaceAdminService {
                 .role(WorkspaceMemberRole.Owner)
                 .build();
 
+        workspaceUsageService.increaseMember(workspace.getId());
         jpaWorkspaceMemberRepository.save(owner);
         return workspace.getId();
     }
