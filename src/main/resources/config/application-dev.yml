@@ -14,31 +14,12 @@ spring:
           jwk-set-uri: https://www.googleapis.com/robot/v1/metadata/jwk/securetoken@system.gserviceaccount.com
 
 formlaez:
-  domainName: formini.so
-  authUrl: https://auth.${formlaez.domainName}
-  appUrl: https://app.${formlaez.domainName}
-  client:
-    auth:
-      baseUrl: http://formlaez-auth-server:9000
-      authorization: Basic Zm9ybWxhZXotd2ViOjEyMzQ1NjdhQCM=
-      redirectUri: ${formlaez.appUrl}/login/code
-
-    authInternal:
-      baseUrl: http://formlaez-auth-server:9000/internal
-      authorization: Basic Zm9ybWxhZXotc2VydmljZXM6ZjBybUxAZXo=
-
-  basic-auth:
-    users:
-      - username: formlaez-auth
-        password: "$2a$10$ZkVufhbhMwdbAg74OIB0FuhjDUMsZWB3ses4NydeqBh8KYdLluVMa"
-        roles: "Admin"
-
   aws:
     credentials:
-      accessKey: AKIASWNAGJRE4MK63Q7B
-      secretKey: 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
+      accessKey: AKIASWNAGJRE76HMHPP2
+      secretKey: 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
     s3:
-      bucketName: formlaez-dev
+      bucketName: formini
     ses:
       signUpTemplateId: SignUp
       welcomeTemplateId: Welcome
@@ -49,26 +30,24 @@ formlaez:
 
   paddle:
     publicKey: classpath:certs/paddle.pub
-    plusPlanId: 47512
-    businessPlanId: 47513
-    vendorId: 11046
-    vendorAuthCode: 61b8f9c561097c0948e22533458f63576afc35bfe633c9adfc
-    apiBaseUrl: https://sandbox-vendors.paddle.com/api/2.0
+    plusPlanId: 816905
+    businessPlanId: 816906
+    vendorId: 166197
+    vendorAuthCode: 3e917f0168b472e47cdf98e0d1a3b7e38aba8ed5cf055cc133
+    apiBaseUrl: https://vendors.paddle.com/api/2.0
 
   billing-plan:
     plans:
       - code: Free
-        productId: -1
         price: 0
-        formLimit: 5
-        documentMergePerMonth: 25
+        formLimit: 3
+        documentMergePerMonth: 20
         submissionPerMonth: 100
-        fileStorageLimit: 100000000
+        fileStorageLimit: 100000
         workspaceMember: 1
 
       - code: Plus
-        productId: 47512
-        price: 25
+        price: 10
         formLimit: 20
         documentMergePerMonth: 100
         submissionPerMonth: 500
@@ -76,9 +55,8 @@ formlaez:
         workspaceMember: 2
 
       - code: Business
-        productId: 47513
         price: 40
-        formLimit: 100
+        formLimit: 200
         documentMergePerMonth: 500
         submissionPerMonth: 2000
         fileStorageLimit: 5000000000

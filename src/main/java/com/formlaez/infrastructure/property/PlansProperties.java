@@ -45,8 +45,6 @@ public class PlansProperties {
         @NotNull
         private WorkspaceType code;
         @NotNull
-        private Long productId;
-        @NotNull
         private BigDecimal price;
         @NotNull
         private int formLimit;
