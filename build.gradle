@@ -36,12 +36,12 @@ dependencies {
 
     implementation platform('com.amazonaws:aws-java-sdk-bom:1.12.425')
     implementation 'com.amazonaws:aws-java-sdk-s3'
-    implementation 'com.amazonaws:aws-java-sdk-ses'
     implementation 'com.google.firebase:firebase-admin:9.1.1'
     implementation 'com.theokanning.openai-gpt3-java:service:0.12.0'
     implementation 'org.apache.pdfbox:pdfbox:2.0.27'
     implementation 'org.apache.pdfbox:pdfbox-tools:2.0.27'
     implementation 'fr.opensagres.xdocreport:fr.opensagres.xdocreport.converter.docx.xwpf:2.0.4'
+    implementation 'com.sendgrid:sendgrid-java:4.9.3'
 
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'

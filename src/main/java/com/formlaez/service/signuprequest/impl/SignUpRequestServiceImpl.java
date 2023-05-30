@@ -12,14 +12,13 @@ import com.formlaez.infrastructure.enumeration.SignUpRequestStatus;
 import com.formlaez.infrastructure.enumeration.UserStatus;
 import com.formlaez.infrastructure.model.entity.JpaSignUpRequest;
 import com.formlaez.infrastructure.model.entity.JpaUser;
+import com.formlaez.infrastructure.property.SendgridProperties;
 import com.formlaez.infrastructure.property.aws.AwsProperties;
 import com.formlaez.infrastructure.repository.JpaSignUpRequestRepository;
 import com.formlaez.infrastructure.repository.JpaUserRepository;
 import com.formlaez.infrastructure.util.RandomUtils;
 import com.formlaez.service.email.EmailService;
 import com.formlaez.service.signuprequest.SignUpRequestService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,21 +38,21 @@ public class SignUpRequestServiceImpl implements SignUpRequestService {
     private final PasswordEncoder passwordEncoder;
     private final UserAdminClient userAdminClient;
     private final EmailService emailService;
-    private final AwsProperties awsProperties;
+    private final SendgridProperties sendgridProperties;
 
 
     public SignUpRequestServiceImpl(JpaUserRepository jpaUserRepository,
                                     JpaSignUpRequestRepository jpaSignUpRequestRepository,
                                     PasswordEncoder passwordEncoder,
-                                    @Qualifier("userAdminFirebaseClient") UserAdminClient userAdminClient,
+                                    UserAdminClient userAdminClient,
                                     EmailService emailService,
-                                    AwsProperties awsProperties) {
+                                    SendgridProperties sendgridProperties) {
         this.jpaUserRepository = jpaUserRepository;
         this.jpaSignUpRequestRepository = jpaSignUpRequestRepository;
         this.passwordEncoder = passwordEncoder;
         this.userAdminClient = userAdminClient;
         this.emailService = emailService;
-        this.awsProperties = awsProperties;
+        this.sendgridProperties = sendgridProperties;
     }
 
     @Override
@@ -70,8 +69,8 @@ public class SignUpRequestServiceImpl implements SignUpRequestService {
         jpaSignUpRequestRepository.save(signUpRequest);
 
         var emailRequest = EmailTemplatedSendingRequest.builder()
-                .fromAddress(awsProperties.ses().getPrimaryEmail())
-                .templateId(awsProperties.ses().getSignUpTemplateId())
+                .fromAddress(sendgridProperties.getDefaultSender())
+                .templateId(sendgridProperties.getSignUpTemplateId())
                 .data(Map.of("verification_code", signUpRequest.getVerificationCode()))
                 .toAddresses(List.of(request.getEmail()))
                 .build();
@@ -124,8 +123,8 @@ public class SignUpRequestServiceImpl implements SignUpRequestService {
         jpaUserRepository.save(user);
 
         var emailRequest = EmailTemplatedSendingRequest.builder()
-                .fromAddress(awsProperties.ses().getPrimaryEmail())
-                .templateId(awsProperties.ses().getWelcomeTemplateId())
+                .fromAddress(sendgridProperties.getDefaultSender())
+                .templateId(sendgridProperties.getWelcomeTemplateId())
                 .data(Map.of("name", signUpRequest.getFirstName()))
                 .toAddresses(List.of(request.getEmail()))
                 .build();

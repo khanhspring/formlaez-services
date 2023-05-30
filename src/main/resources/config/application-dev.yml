@@ -20,10 +20,6 @@ formlaez:
       secretKey: 6VF+4RjLRWZWh0NqMI76aCTmRpeZgkYcvXzfG+iw
     s3:
       bucketName: formini
-    ses:
-      signUpTemplateId: SignUp
-      welcomeTemplateId: Welcome
-      primaryEmail: hello@formini.so
 
   firebase:
     serviceAccountJsonFile: classpath:certs/firebase.json
@@ -65,3 +61,9 @@ formlaez:
   scheduler:
     subscription-expired:
       cron: 0 0 8,14 * * *
+
+  sendgrid:
+    apiKey: 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
+    defaultSender: hello@formini.so
+    signUpTemplateId: d-9d73823e3a1b4368b8e2ac0e39fadf73
+    welcomeTemplateId:

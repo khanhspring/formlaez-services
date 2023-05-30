@@ -5,8 +5,6 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
-import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClientBuilder;
 import com.formlaez.infrastructure.property.aws.AwsProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -23,13 +21,6 @@ public class AwsConfiguration {
                 .withCredentials(awsCredentials(awsProperties))
                 .withRegion(Regions.AP_SOUTHEAST_1)
                 .build();
-    }
-
-    @Bean
-    public AmazonSimpleEmailService sesService(AwsProperties awsProperties) {
-        return AmazonSimpleEmailServiceClientBuilder.standard()
-                .withCredentials(awsCredentials(awsProperties))
-                .withRegion(Regions.AP_SOUTHEAST_1).build();
     }
 
     private AWSStaticCredentialsProvider awsCredentials(AwsProperties awsProperties) {
