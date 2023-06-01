@@ -66,9 +66,9 @@ formlaez:
 
   sendgrid:
     apiKey: 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
-    defaultSender: hell@formini.so
-    signUpTemplateId:
-    welcomeTemplateId:
+    defaultSender: hello@formini.so
+    signUpTemplateId: d-9d73823e3a1b4368b8e2ac0e39fadf73
+    welcomeTemplateId: d-afb1172187904ca1bfb665fdca58c246
 
 logging:
   level:
