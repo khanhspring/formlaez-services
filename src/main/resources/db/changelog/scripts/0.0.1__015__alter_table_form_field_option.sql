@@ -1,0 +1,1 @@
+ALTER TABLE form_field_option DROP CONSTRAINT form_field_option_code_key;

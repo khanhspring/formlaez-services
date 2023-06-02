@@ -9,6 +9,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(value = "/admin/forms/sections")
@@ -19,6 +21,11 @@ public class FormSectionAdminController {
     @PostMapping
     public ResponseId<Long> create(@Valid @RequestBody CreateFormSectionRequest request) {
         return ResponseId.of(formSectionAdminService.create(request));
+    }
+
+    @PostMapping("bulk")
+    public void createBulk(@Valid @RequestBody List<CreateFormSectionRequest> request) {
+        formSectionAdminService.create(request);
     }
 
     @PutMapping("{sectionCode}")
@@ -38,5 +45,10 @@ public class FormSectionAdminController {
     @DeleteMapping("{sectionCode}")
     public void remove(@PathVariable String sectionCode) {
         formSectionAdminService.remove(sectionCode);
+    }
+
+    @DeleteMapping
+    public void removeRange(@Valid @RequestBody List<String> removeIds) {
+        formSectionAdminService.remove(removeIds);
     }
 }

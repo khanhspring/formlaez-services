@@ -2,7 +2,6 @@ package com.formlaez.infrastructure.model.entity;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.Version;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
@@ -20,6 +19,4 @@ public class JpaTimestampEntity {
     private Instant createdDate;
     @LastModifiedDate
     private Instant lastModifiedDate;
-    @Version
-    private Long version;
 }

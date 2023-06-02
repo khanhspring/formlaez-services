@@ -16,41 +16,18 @@ spring:
     show-sql: false
 
 formlaez:
-  domainName: 127.0.0.1
-  authUrl: http://${formlaez.domainName}:9000
-  appUrl: http://${formlaez.domainName}:3000
-  client:
-    auth:
-      baseUrl: http://localhost:9000
-      authorization: Basic Zm9ybWxhZXotd2ViOjEyMzQ1NjdhQCM=
-      redirectUri: ${formlaez.appUrl}/login/code
-
-    authInternal:
-      baseUrl: http://localhost:9000/internal
-      authorization: Basic Zm9ybWxhZXotc2VydmljZXM6ZjBybUxAZXo=
-
-  basic-auth:
-    users:
-      - username: formlaez-auth
-        password: "$2a$10$ZkVufhbhMwdbAg74OIB0FuhjDUMsZWB3ses4NydeqBh8KYdLluVMa"
-        roles: "Admin"
-
   aws:
     credentials:
       accessKey: AKIASWNAGJRE4MK63Q7B
       secretKey: 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
     s3:
       bucketName: formlaez-dev
-    ses:
-      signUpTemplateId: SignUp
-      welcomeTemplateId: Welcome
-      primaryEmail: hello@formini.so
 
   firebase:
-    serviceAccountJsonFile: classpath:certs/firebase.json
+    serviceAccountJsonFile: classpath:certs-local/firebase.json
 
   paddle:
-    publicKey: classpath:certs/paddle.pub
+    publicKey: classpath:certs-local/paddle.pub
     plusPlanId: 47512
     businessPlanId: 47513
     vendorId: 11046
@@ -60,7 +37,6 @@ formlaez:
   billing-plan:
     plans:
       - code: Free
-        productId: -1
         price: 0
         formLimit: 5
         documentMergePerMonth: 25
@@ -69,7 +45,6 @@ formlaez:
         workspaceMember: 1
 
       - code: Plus
-        productId: 47512
         price: 25
         formLimit: 20
         documentMergePerMonth: 100
@@ -78,7 +53,6 @@ formlaez:
         workspaceMember: 2
 
       - code: Business
-        productId: 47513
         price: 40
         formLimit: 100
         documentMergePerMonth: 500
@@ -89,6 +63,12 @@ formlaez:
   scheduler:
     subscription-expired:
       cron: 0 0 8,14 * * *
+
+  sendgrid:
+    apiKey: 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
+    defaultSender: hello@formini.so
+    signUpTemplateId: d-9d73823e3a1b4368b8e2ac0e39fadf73
+    welcomeTemplateId: d-afb1172187904ca1bfb665fdca58c246
 
 logging:
   level:

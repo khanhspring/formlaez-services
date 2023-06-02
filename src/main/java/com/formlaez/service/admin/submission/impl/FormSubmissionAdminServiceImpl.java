@@ -7,6 +7,7 @@ import com.formlaez.infrastructure.configuration.exception.InvalidParamsExceptio
 import com.formlaez.infrastructure.configuration.exception.ResourceNotFoundException;
 import com.formlaez.infrastructure.converter.FormSubmissionDataCsvConverter;
 import com.formlaez.infrastructure.converter.UserResponseConverter;
+import com.formlaez.infrastructure.enumeration.DocumentMergeFileType;
 import com.formlaez.infrastructure.enumeration.FormSubmissionStatus;
 import com.formlaez.infrastructure.model.projection.JpaFormSubmissionProjection;
 import com.formlaez.infrastructure.repository.JpaFormRepository;
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.PrintWriter;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -74,7 +76,8 @@ public class FormSubmissionAdminServiceImpl implements FormSubmissionAdminServic
     public byte[] mergeDocument(MergeDocumentFormSubmissionRequest request) {
         var submission = jpaFormSubmissionRepository.findByCode(request.getCode())
                 .orElseThrow(ResourceNotFoundException::new);
-        return formSubmissionDocumentMergeHelper.mergeDocument(submission, request.getTemplateId());
+        var fileType = Objects.requireNonNullElse(request.getFileType(), DocumentMergeFileType.Docx);
+        return formSubmissionDocumentMergeHelper.mergeDocument(submission, request.getTemplateId(), fileType);
     }
 
     @Override

@@ -25,9 +25,6 @@ public class AwsProperties {
     @NotNull
     private AwsS3Properties s3;
 
-    @NotNull
-    private AwsSesProperties ses;
-
     @Getter
     @Setter
     @Validated
@@ -37,20 +34,6 @@ public class AwsProperties {
         private String accessKey;
         @NotBlank
         private String secretKey;
-    }
-
-    @Getter
-    @Setter
-    @Validated
-    public static class AwsSesProperties {
-
-        @NotBlank
-        private String signUpTemplateId;
-        @NotBlank
-        private String welcomeTemplateId;
-
-        @NotBlank
-        private String primaryEmail;
     }
 
     @Getter
@@ -66,7 +49,4 @@ public class AwsProperties {
         return s3;
     }
 
-    public AwsSesProperties ses() {
-        return ses;
-    }
 }

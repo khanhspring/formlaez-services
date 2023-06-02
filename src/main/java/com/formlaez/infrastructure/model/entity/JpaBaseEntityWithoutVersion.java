@@ -16,7 +16,7 @@ import java.sql.Types;
 @Setter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public class JpaBaseEntity extends JpaTimestampEntity {
+public class JpaBaseEntityWithoutVersion extends JpaTimestampEntity {
     @CreatedBy
     @JdbcTypeCode(Types.VARCHAR)
     private String createdBy;
@@ -24,8 +24,5 @@ public class JpaBaseEntity extends JpaTimestampEntity {
     @LastModifiedBy
     @JdbcTypeCode(Types.VARCHAR)
     private String lastModifiedBy;
-
-    @Version
-    private Long version;
 
 }

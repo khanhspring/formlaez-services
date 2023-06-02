@@ -19,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -69,6 +71,16 @@ public class FormSectionAdminServiceImpl implements FormSectionAdminService {
             }
         }
         return section.getId();
+    }
+
+    @Override
+    @Transactional
+    public List<Long> create(List<CreateFormSectionRequest> request) {
+        List<Long> resultIds = new ArrayList<>();
+        for (var sectionRequest : request) {
+            resultIds.add(this.create(sectionRequest));
+        }
+        return resultIds;
     }
 
     @Override
@@ -145,5 +157,13 @@ public class FormSectionAdminServiceImpl implements FormSectionAdminService {
                 null
         );
         jpaFormSectionRepository.delete(section);
+    }
+
+    @Override
+    @Transactional
+    public void remove(List<String> removeCodes) {
+        for (var code : removeCodes) {
+            remove(code);
+        }
     }
 }

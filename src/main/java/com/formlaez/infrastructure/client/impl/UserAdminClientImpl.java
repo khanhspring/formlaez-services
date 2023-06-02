@@ -5,24 +5,14 @@ import com.formlaez.infrastructure.client.UserAdminClient;
 import com.formlaez.infrastructure.client.model.ChangeUserPasswordRequest;
 import com.formlaez.infrastructure.client.model.CreateUserRequest;
 import com.formlaez.infrastructure.configuration.exception.ApplicationException;
-import com.formlaez.infrastructure.property.AuthInternalClientProperties;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserRecord;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
-
-import java.util.Objects;
+import org.springframework.stereotype.Component;
 
 @Slf4j
-@Service("userAdminFirebaseClient")
-public class UserAdminFirebaseClientImpl implements UserAdminClient {
+@Component
+public class UserAdminClientImpl implements UserAdminClient {
 
     @Override
     public ResponseId<String> createUser(CreateUserRequest request) {
@@ -47,7 +37,6 @@ public class UserAdminFirebaseClientImpl implements UserAdminClient {
         try {
             var updateRequest = new UserRecord.UpdateRequest(request.getUserId())
                     .setPassword(request.getNewPassword());
-
             FirebaseAuth.getInstance().updateUser(updateRequest);
         } catch (Exception e) {
             log.error("Change user password error", e);

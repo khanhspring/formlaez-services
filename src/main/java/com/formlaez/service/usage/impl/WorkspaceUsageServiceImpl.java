@@ -54,7 +54,7 @@ public class WorkspaceUsageServiceImpl implements WorkspaceUsageService {
                 .orElseThrow();
         var usage = JpaWorkspaceUsage.builder()
                 .workspace(workspace)
-                .totalMember(2)
+                .totalMember(1)
                 .build();
         jpaWorkspaceUsageRepository.save(usage);
     }
@@ -231,9 +231,14 @@ public class WorkspaceUsageServiceImpl implements WorkspaceUsageService {
                         .totalMember(1)
                         .build());
 
+        var totalMember = 1;
+        if (usage.getTotalMember() > 0) {
+            totalMember = usage.getTotalMember();
+        }
+
         return WorkspaceUsageStatisticResponse.builder()
                 .totalForm(usage.getTotalForm())
-                .totalMember(usage.getTotalMember())
+                .totalMember(totalMember)
                 .totalFileStorage(usage.getTotalFileStorage())
                 .totalSubmission(monthlyUsage.getTotalSubmission())
                 .totalDocumentMerge(monthlyUsage.getTotalDocumentMerge())

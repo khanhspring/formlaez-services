@@ -12,12 +12,20 @@ import org.springframework.validation.annotation.Validated;
 @Data
 @Validated
 @Configuration
-@ConfigurationProperties(prefix = AuthInternalClientProperties.PREFIX)
-public class AuthInternalClientProperties {
-    public static final String PREFIX = "formlaez.client.auth-internal";
+@ConfigurationProperties(prefix = SendgridProperties.PREFIX)
+public class SendgridProperties {
+    public static final String PREFIX = "formlaez.sendgrid";
 
     @NotBlank
-    private String baseUrl;
+    private String apiKey;
+
     @NotBlank
-    private String authorization;
+    private String defaultSender;
+
+    @NotBlank
+    private String signUpTemplateId;
+
+    @NotBlank
+    private String welcomeTemplateId;
+
 }

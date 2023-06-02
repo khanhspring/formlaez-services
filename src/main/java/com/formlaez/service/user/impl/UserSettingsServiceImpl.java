@@ -20,7 +20,7 @@ public class UserSettingsServiceImpl implements UserSettingsService {
     private final JpaUserRepository jpaUserRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserSettingsServiceImpl(@Qualifier("userAdminFirebaseClient") UserAdminClient userAdminClient,
+    public UserSettingsServiceImpl(UserAdminClient userAdminClient,
                                    JpaUserRepository jpaUserRepository,
                                    PasswordEncoder passwordEncoder) {
         this.userAdminClient = userAdminClient;
