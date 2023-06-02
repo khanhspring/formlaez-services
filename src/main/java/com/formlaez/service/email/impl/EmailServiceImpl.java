@@ -32,16 +32,15 @@ public class EmailServiceImpl implements EmailService {
         mail.setFrom(from);
         mail.setTemplateId(request.getTemplateId());
 
-        if (Objects.nonNull(request.getData())) {
-            for (var entryData : request.getData().entrySet()) {
-                mail.addCustomArg(entryData.getKey(), entryData.getValue());
-            }
-        }
-
         for (var toAddress : request.getToAddresses()) {
             Email to = new Email(toAddress);
             Personalization personalization = new Personalization();
             personalization.addTo(to);
+            if (Objects.nonNull(request.getData())) {
+                for (var entryData : request.getData().entrySet()) {
+                    personalization.addDynamicTemplateData(entryData.getKey(), entryData.getValue());
+                }
+            }
             mail.addPersonalization(personalization);
         }
 
