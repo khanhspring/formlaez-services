@@ -12,7 +12,7 @@ call ..\gradlew.bat clean build -p ..\
 
 ECHO uploading jar file...
 scp ../Dockerfile root@%SERVER_IP%:%SERVER_DIR%/Dockerfile
-scp ../docker-compose.dev.yml root@%SERVER_IP%:%SERVER_DIR%/docker-compose.yml
+scp ../docker-compose.prod.yml root@%SERVER_IP%:%SERVER_DIR%/docker-compose.yml
 scp ../build/libs/%SERVICE_NAME%-%VERSION%.jar root@%SERVER_IP%:%SERVER_DIR%/target/app.jar
 
 ECHO restarting app on server...

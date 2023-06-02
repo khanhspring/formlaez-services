@@ -69,6 +69,6 @@ public class AuthServiceImpl implements AuthService {
 
         arr[arr.length - 1] = "";
         String firstName = String.join(" ", arr);
-        return Tuples.of(firstName, lastName);
+        return Tuples.of(firstName.trim(), lastName.trim());
     }
 }

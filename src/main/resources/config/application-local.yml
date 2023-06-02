@@ -10,7 +10,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: https://securetoken.google.com/formini-so
+          issuer-uri: https://securetoken.google.com/formini-so-dev
           jwk-set-uri: https://www.googleapis.com/robot/v1/metadata/jwk/securetoken@system.gserviceaccount.com
   jpa:
     show-sql: false
