@@ -38,7 +38,7 @@ formlaez:
     plans:
       - code: Free
         price: 0
-        formLimit: 5
+        formLimit: 3
         documentMergePerMonth: 25
         submissionPerMonth: 100
         fileStorageLimit: 100000000
