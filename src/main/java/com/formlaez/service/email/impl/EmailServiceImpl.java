@@ -26,7 +26,7 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void sendTemplatedEmail(EmailTemplatedSendingRequest request) {
-        Email from = new Email(request.getFromAddress());
+        Email from = new Email(request.getFromAddress(), request.getFromName());
 
         Mail mail = new Mail();
         mail.setFrom(from);

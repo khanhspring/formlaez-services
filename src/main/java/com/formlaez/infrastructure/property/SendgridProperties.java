@@ -23,6 +23,9 @@ public class SendgridProperties {
     private String defaultSender;
 
     @NotBlank
+    private String defaultSenderName;
+
+    @NotBlank
     private String signUpTemplateId;
 
     @NotBlank

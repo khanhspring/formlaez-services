@@ -70,6 +70,7 @@ public class SignUpRequestServiceImpl implements SignUpRequestService {
 
         var emailRequest = EmailTemplatedSendingRequest.builder()
                 .fromAddress(sendgridProperties.getDefaultSender())
+                .fromName(sendgridProperties.getDefaultSenderName())
                 .templateId(sendgridProperties.getSignUpTemplateId())
                 .data(Map.of("verification_code", signUpRequest.getVerificationCode()))
                 .toAddresses(List.of(request.getEmail()))
@@ -124,6 +125,7 @@ public class SignUpRequestServiceImpl implements SignUpRequestService {
 
         var emailRequest = EmailTemplatedSendingRequest.builder()
                 .fromAddress(sendgridProperties.getDefaultSender())
+                .fromName(sendgridProperties.getDefaultSenderName())
                 .templateId(sendgridProperties.getWelcomeTemplateId())
                 .data(Map.of("name", signUpRequest.getFirstName()))
                 .toAddresses(List.of(request.getEmail()))

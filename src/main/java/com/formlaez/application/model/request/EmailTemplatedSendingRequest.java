@@ -11,6 +11,7 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EmailTemplatedSendingRequest {
+    private String fromName;
     private String fromAddress;
     private List<String> toAddresses;
     private String templateId;
