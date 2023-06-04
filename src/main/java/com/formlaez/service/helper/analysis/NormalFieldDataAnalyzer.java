@@ -49,7 +49,8 @@ public class NormalFieldDataAnalyzer implements FieldDataAnalyzer {
                 FormFieldType.InputText,
                 FormFieldType.Email,
                 FormFieldType.Switch,
-                FormFieldType.Dropdown
+                FormFieldType.Dropdown,
+                FormFieldType.InputUrl
         ).contains(type);
     }
 }

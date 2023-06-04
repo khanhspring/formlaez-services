@@ -43,6 +43,9 @@ public class ArrayFieldDataAnalyzer implements FieldDataAnalyzer {
 
     @Override
     public boolean isSupport(FormFieldType type) {
-        return FormFieldType.MultipleChoice == type;
+        return List.of(
+                FormFieldType.MultipleChoice,
+                FormFieldType.StatusList
+        ).contains(type);
     }
 }

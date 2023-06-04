@@ -66,6 +66,7 @@ public class FormFieldResponseConverter implements Converter<JpaFormField, FormF
                 .id(source.getId())
                 .code(source.getCode())
                 .label(source.getLabel())
+                .bgColor(source.getBgColor())
                 .position(source.getPosition())
                 .build();
     }

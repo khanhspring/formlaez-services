@@ -11,6 +11,7 @@ public class FormFieldOptionResponse {
     private Long id;
     private String code;
     private String label;
+    private String bgColor;
 
     private int position;
 }

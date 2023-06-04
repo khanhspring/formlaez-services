@@ -20,6 +20,7 @@ public class JpaFormFieldOption extends JpaBaseEntity {
     private Long id;
     private String code;
     private String label;
+    private String bgColor;
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")

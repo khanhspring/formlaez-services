@@ -12,4 +12,5 @@ public class FormFieldOptionRequest {
     private String code;
     @NotBlank
     private String label;
+    private String bgColor;
 }

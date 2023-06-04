@@ -83,6 +83,7 @@ public class FormFieldAdminServiceImpl implements FormFieldAdminService {
                 var jpaOption = JpaFormFieldOption.builder()
                         .code(option.getCode())
                         .label(option.getLabel())
+                        .bgColor(option.getBgColor())
                         .field(field)
                         .position(optionPosition++)
                         .build();
@@ -136,10 +137,12 @@ public class FormFieldAdminServiceImpl implements FormFieldAdminService {
                     jpaOption = existingOption.get();
                     jpaOption.setLabel(option.getLabel());
                     jpaOption.setPosition(optionPosition++);
+                    jpaOption.setBgColor(option.getBgColor());
                 } else {
                     jpaOption = JpaFormFieldOption.builder()
                             .code(option.getCode())
                             .label(option.getLabel())
+                            .bgColor(option.getBgColor())
                             .field(field)
                             .position(optionPosition++)
                             .build();
