@@ -6,3 +6,10 @@ databaseChangeLog:
         - sqlFile:
             splitStatements: true
             path: db/changelog/scripts/1.1.0__001__alter_table_form_field_option.sql
+  - changeSet:
+      id: 1.1.0__002__create_table_page_view
+      author: khanhspring
+      changes:
+        - sqlFile:
+            splitStatements: true
+            path: db/changelog/scripts/1.1.0__002__create_table_page_view.sql

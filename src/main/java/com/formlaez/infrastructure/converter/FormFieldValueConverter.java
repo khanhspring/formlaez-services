@@ -45,7 +45,7 @@ public class FormFieldValueConverter {
         }
         return switch (field.getType()) {
             case Dropdown -> getDropdownValue(field, rawValue);
-            case MultipleChoice -> getMultiChoiceValue(field, rawValue);
+            case MultipleChoice, StatusList -> getMultiChoiceValue(field, rawValue);
             case InputNumber -> formatNumber(field, rawValue);
             default -> asText(field, rawValue);
         };
