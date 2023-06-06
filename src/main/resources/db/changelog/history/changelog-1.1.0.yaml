@@ -13,3 +13,17 @@ databaseChangeLog:
         - sqlFile:
             splitStatements: true
             path: db/changelog/scripts/1.1.0__002__create_table_page_view.sql
+  - changeSet:
+      id: 1.1.0__001__init-page-view-template
+      author: khanhspring
+      changes:
+        - sqlFile:
+            splitStatements: true
+            path: db/changelog/data/1.1.0__001__init-page-view-template.sql
+  - changeSet:
+      id: 1.1.0__003__alter_table_openai_api_setting
+      author: khanhspring
+      changes:
+        - sqlFile:
+            splitStatements: true
+            path: db/changelog/scripts/1.1.0__003__alter_table_openai_api_setting.sql

@@ -52,7 +52,8 @@ public class ResourceServerConfig {
                         "/document-templates",
                         "/document-templates",
                         "/forms/{formCode}",
-                        "/forms/{formCode}/detail"
+                        "/forms/{formCode}/detail",
+                        "/page-views/**"
                 ).permitAll()
                 .anyRequest().authenticated()
                 .and()
