@@ -27,3 +27,10 @@ databaseChangeLog:
         - sqlFile:
             splitStatements: true
             path: db/changelog/scripts/1.1.0__003__alter_table_openai_api_setting.sql
+  - changeSet:
+      id: 1.1.0__004__alter_table_form_field_option
+      author: khanhspring
+      changes:
+        - sqlFile:
+            splitStatements: true
+            path: db/changelog/scripts/1.1.0__004__alter_table_form_field_option.sql

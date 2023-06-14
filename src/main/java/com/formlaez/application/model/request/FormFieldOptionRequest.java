@@ -10,7 +10,6 @@ public class FormFieldOptionRequest {
 
     @NotBlank
     private String code;
-    @NotBlank
     private String label;
     private String bgColor;
 }
